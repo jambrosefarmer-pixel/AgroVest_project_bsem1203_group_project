@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroVest — Get Started</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css_floder/login.css">
+    
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="#">Agro<span>Vest</span></a>
+    <a class="nav-back" href="index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Back to home
+    </a>
+  </nav>
+
+  <section class="hero2">
+
+    <!-- ── LEFT ── -->
+    <div class="top_left">
+
+      <div class="left-tag">
+        Open to farmers &amp; investors
+      </div>
+
+      <h1>Step Into the Market.<br><em>Start Your Journey.</em></h1>
+
+      <p class="left-desc">
+        AgroVest connects smallholder farmers with investors who believe in sustainable agriculture. Grow together, share the harvest.
+      </p>
+
+      <!-- floating card stack -->
+      <div class="left-visual">
+        <div class="lv-card lv-back2"></div>
+        <div class="lv-card lv-back1"></div>
+        <div class="lv-card lv-main">
+          <div class="lv-row">
+            <div>
+              <div class="lv-label">Active investment</div>
+              <div class="lv-name">Cassava Farm — Bo District</div>
+            </div>
+            <div class="lv-amount">SLL 4.2M</div>
+          </div>
+          <div class="lv-bar-wrap"><div class="lv-bar"></div></div>
+          <div class="lv-badge">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+            Harvest in 42 days
+          </div>
+        </div>
+      </div>
+
+      <div class="left-stats">
+        <div class="lst"><div class="lst-num">3,800+</div><div class="lst-label">Farmers onboarded</div></div>
+        <div class="lst"><div class="lst-num">SLL 12B</div><div class="lst-label">Invested to date</div></div>
+        <div class="lst"><div class="lst-num">94%</div><div class="lst-label">Harvest success rate</div></div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT (FORM) ── -->
+    <div class="cta">
+
+      <div class="cta-accent"></div>
+
+      <h1 id="gs">Welcome<br><em>back.</em></h1>
+
+      <p id="wl">Sign in to AgroVest, your farm investments and community are waiting.</p>
+
+      <div id="register">
+        <form action="" onsubmit="return loginAccount();">
+
+          <input type="text" id="login-identifier" placeholder="Email or phone number" autocomplete="username">
+
+          <div class="input-wrap">
+            <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+            <button class="toggle-pw" type="button" onclick="togglePassword()" aria-label="Toggle password visibility">
+              <svg id="eye-icon" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="forgot"><a href="#">Forgot password?</a></div>
+
+          <button type="submit" id="register_bun">Sign in to AgroVest</button>
+          <div id="login-error" style="display:none; margin-top:1rem; color:#E24B4A; font-size:0.92rem; font-weight:600;"></div>
+
+        </form>
+      </div>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or continue with</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="social-row">
+        <button class="social-btn">
+          <!-- Google G -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.5 12.23c0-.77-.07-1.52-.2-2.23H12v4.26h5.92a5.08 5.08 0 01-2.2 3.33v2.77h3.56c2.08-1.92 3.28-4.74 3.28-8.13z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.64l-3.56-2.77c-.98.66-2.23 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.12A6.8 6.8 0 015.45 12c0-.73.13-1.44.39-2.12V7.04H2.18A11 11 0 001 12c0 1.77.42 3.45 1.18 4.96l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+        <button class="social-btn">
+          <!-- Phone icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12" y2="18"/>
+          </svg>
+          Phone OTP
+        </button>
+      </div>
+
+      <div class="dha">
+        <p id="dha_1">Don't have an account?</p>
+        <a href="create.html"><button id="create_acount">Create account</button></a>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          SSL encrypted
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Bank-grade security
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          NRA compliant
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function togglePassword() {
+      const pw = document.getElementById('login-password');
+      const icon = document.getElementById('eye-icon');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+      } else {
+        pw.type = 'password';
+        icon.innerHTML = `<path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>`;
+      }
+    }
+
+    function normalizeAccountKey(key) {
+      return key.trim().replace(/[\s-]/g, '').toLowerCase();
+    }
+
+    function getStoredAccounts() {
+      try {
+        return JSON.parse(localStorage.getItem('agrovest_accounts') || '{}');
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function showLoginError(message) {
+      const error = document.getElementById('login-error');
+      if (!error) return;
+      error.textContent = message;
+      error.style.display = 'block';
+    }
+
+    function hideLoginError() {
+      const error = document.getElementById('login-error');
+      if (!error) return;
+      error.style.display = 'none';
+    }
+
+    function loginAccount() {
+      hideLoginError();
+      const identifier = document.getElementById('login-identifier').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!identifier || !password) {
+        showLoginError('Please enter your email/phone and password.');
+        return false;
+      }
+
+      const accountKey = normalizeAccountKey(identifier);
+      const accounts = getStoredAccounts();
+      const account = accounts[accountKey];
+
+      if (!account) {
+        showLoginError('No account found with that email or phone number.');
+        return false;
+      }
+
+      if (account.password !== password) {
+        showLoginError('Incorrect password. Please try again.');
+        return false;
+      }
+
+      if (account.role === 'investor') {
+        window.location.href = 'investors_dashboard.html';
+      } else {
+        window.location.href = 'farmer_dashboard.html';
+      }
+      return false;
+    }
+  </script>
+
+</body>
+</html>

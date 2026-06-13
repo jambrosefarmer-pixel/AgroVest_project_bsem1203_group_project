@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVest — Farmer Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css_floder/farmer_dashboard.css">
+
+</head>
+<body>
+<div class="toast" id="toast">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-logo">Agro<span>Vest</span></div>
+    </div>
+    <div class="topbar-search">
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+        <input type="text" placeholder="Search crops, investors, market prices…">
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn" onclick="toggleSidebar()" title="Toggle menu">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M3 5h10M3 8h10M3 11h10"/>
+        </svg>
+      </div>
+      <div class="icon-btn" onclick="showToast('Weather: 28°C, Partly cloudy in Bo District')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><line x1="8" y1="1" x2="8" y2="2.5"/><line x1="8" y1="13.5" x2="8" y2="15"/><line x1="1" y1="8" x2="2.5" y2="8"/><line x1="13.5" y1="8" x2="15" y2="8"/></svg>
+      </div>
+      <div class="icon-btn" onclick="switchPanel('harvest-calendar')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5"/></svg>
+      </div>
+      <div class="icon-btn" onclick="showToast('Weather: 28°C, Partly cloudy in Bo District')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><line x1="8" y1="1" x2="8" y2="2.5"/><line x1="8" y1="13.5" x2="8" y2="15"/><line x1="1" y1="8" x2="2.5" y2="8"/><line x1="13.5" y1="8" x2="15" y2="8"/></svg>
+      </div>
+      <div class="icon-btn" onclick="switchPanel('harvest-calendar')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5"/></svg>
+      </div>
+      <div class="icon-btn">
+        <div class="notif-dot"></div>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 1.5a4.5 4.5 0 014.5 4.5c0 4 1.5 5 1.5 5H2S3.5 10 3.5 6A4.5 4.5 0 018 1.5z"/><path d="M6.5 13.5a1.5 1.5 0 003 0"/></svg>
+      </div>
+      <div class="topbar-user">
+        <div class="user-av">AK</div>
+        <div class="user-info">
+          <div class="user-name">Amara Koroma</div>
+          <div class="user-role">Verified Farmer</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Main</div>
+    <div class="nav-item active" id="nav-overview" onclick="switchPanel('overview')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Overview
+    </div>
+    <div class="nav-item" id="nav-my-farm" onclick="switchPanel('my-farm')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 14V8.5l7-6 7 6V14H1z"/><rect x="5.5" y="9" width="5" height="5"/></svg>
+      My Farm
+    </div>
+    <div class="nav-item" id="nav-harvest-calendar" onclick="switchPanel('harvest-calendar')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5"/><path d="M5 10l2 2 4-4"/></svg>
+      Harvest Calendar
+      <span class="nav-badge amber">2</span>
+    </div>
+    <div class="nav-item" id="nav-my-listings" onclick="switchPanel('my-listings')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 2h4l1.5 3H14l-1.5 6H5L2 2z"/><circle cx="6" cy="14" r="1"/><circle cx="12" cy="14" r="1"/></svg>
+      My Listings
+    </div>
+    <div class="nav-item" id="nav-investors" onclick="switchPanel('investors')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10.5 7a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/><path d="M14.5 14s0-3.5-4-3.5"/><path d="M5.5 7a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/><path d="M1.5 14s0-3.5 4-3.5c2 0 3 1 4 2"/></svg>
+      Investors
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" id="nav-funding" onclick="switchPanel('funding')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v1.2m0 5.6V12M6 9.5h2.5a1.5 1.5 0 000-3H7A1.5 1.5 0 015.5 5h3"/></svg>
+      Funding
+    </div>
+
+    <div class="sidebar-section">Market</div>
+    <div class="nav-item" id="nav-marketplace" onclick="switchPanel('marketplace')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 3h14l-1.5 6H2.5L1 3z"/><path d="M5.5 14a.5.5 0 100-1 .5.5 0 000 1z" fill="currentColor"/><path d="M11.5 14a.5.5 0 100-1 .5.5 0 000 1z" fill="currentColor"/></svg>
+      Marketplace
+    </div>
+    <div class="nav-item" id="nav-prices" onclick="switchPanel('prices')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1 11 5 6 8 9 11 5 15 8"/></svg>
+      Market Prices
+    </div>
+
+    <div class="sidebar-section">Account</div>
+    <div class="nav-item" id="nav-profile" onclick="switchPanel('profile')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2 14s.5-5 6-5 6 5 6 5"/></svg>
+      Profile
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-farm-card">
+        <div class="sfc-label">Active Farm</div>
+        <div class="sfc-name">🌾 Koroma Family Farm</div>
+        <div class="sfc-crop">Rice · Cassava · Bo District</div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:1rem;justify-content:center;font-size:.8rem" onclick="logout()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L14 7.5 10 12"/><path d="M14 7.5H6"/><path d="M6 3.5H3.5a1 1 0 00-1 1v7a1 1 0 001 1H6"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-back" id="page-back" style="display:none;">
+      <button class="btn btn-outline" onclick="switchPanel('overview')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+        Back to overview
+      </button>
+    </div>
+
+    <!-- ═══════════ OVERVIEW ═══════════ -->
+    <div class="panel active" id="panel-overview">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Good morning 🌤</div>
+          <div class="ph-title">Welcome back, <em>Amara</em></div>
+          <div class="ph-sub">Your farm is performing well. Rice harvest due in 42 days.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="switchPanel('harvest-calendar')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5"/></svg>
+            View Calendar
+          </button>
+          <button class="btn btn-primary" onclick="showCreateListingForm('my-listings')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+            New Listing
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row" style="margin-bottom:1.2rem">
+        <div class="stat-card green">
+          <div class="stat-icon" style="background:rgba(90,138,60,0.12)">🌾</div>
+          <div class="stat-val">4.2 ha</div>
+          <div class="stat-label">Total farm area</div>
+          <div class="stat-change up">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1 7 4 3 7 5 9 2"/></svg>
+            +0.5 ha since last season
+          </div>
+        </div>
+        <div class="stat-card straw">
+          <div class="stat-icon" style="background:rgba(212,168,67,0.12)">💰</div>
+          <div class="stat-val">SLL 8.4M</div>
+          <div class="stat-label">Total funding raised</div>
+          <div class="stat-change up">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1 7 4 3 7 5 9 2"/></svg>
+            +SLL 1.2M this season
+          </div>
+        </div>
+        <div class="stat-card sky">
+          <div class="stat-icon" style="background:rgba(58,126,191,0.12)">👥</div>
+          <div class="stat-val">12</div>
+          <div class="stat-label">Active investors</div>
+          <div class="stat-change up">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1 7 4 3 7 5 9 2"/></svg>
+            3 new this month
+          </div>
+        </div>
+        <div class="stat-card rust">
+          <div class="stat-icon" style="background:rgba(166,61,47,0.1)">📅</div>
+          <div class="stat-val">42 days</div>
+          <div class="stat-label">Next harvest (Rice)</div>
+          <div class="stat-change" style="color:var(--straw)">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="5" r="4"/><line x1="5" y1="3" x2="5" y2="5.5"/><line x1="5" y1="5.5" x2="6.5" y2="7"/></svg>
+            Due Jul 18, 2025
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-6-4" style="margin-bottom:1.2rem">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">My Active Listings</div><div class="card-sub">Crops visible to investors</div></div>
+            <button class="btn btn-outline" onclick="switchPanel('my-listings')" style="font-size:.75rem">View all</button>
+          </div>
+          <div class="listing-grid">
+            <div class="listing-card">
+              <div class="lc-img" style="background:#e8f5e0"><div class="lc-badge live">Live</div>🌾</div>
+              <div class="lc-body">
+                <div class="lc-crop">Rice</div>
+                <div class="lc-name">Premium Lowland Rice — Season 2</div>
+                <div class="lc-meta">Bo District · 2.1 ha · Planted Mar 2025</div>
+                <div class="lc-bar-wrap"><div class="lc-bar" style="width:72%"></div></div>
+                <div class="lc-bar-labels"><span>72% funded</span><span>SLL 3.6M / 5M</span></div>
+                <div class="lc-footer"><div><div class="lc-price">SLL 5M</div><div class="lc-returns">18% est. return</div></div><span class="pill green">Active</span></div>
+              </div>
+            </div>
+            <div class="listing-card">
+              <div class="lc-img" style="background:#fdf6e0"><div class="lc-badge funded">Funded</div>🥜</div>
+              <div class="lc-body">
+                <div class="lc-crop">Groundnut</div>
+                <div class="lc-name">Groundnut Harvest Batch A</div>
+                <div class="lc-meta">Moyamba · 1.2 ha · Planted Jan 2025</div>
+                <div class="lc-bar-wrap"><div class="lc-bar" style="width:100%;background:linear-gradient(90deg,var(--straw),#e8c460)"></div></div>
+                <div class="lc-bar-labels"><span>Fully funded</span><span>SLL 2.4M</span></div>
+                <div class="lc-footer"><div><div class="lc-price">SLL 2.4M</div><div class="lc-returns">22% est. return</div></div><span class="pill amber">Funded</span></div>
+              </div>
+            </div>
+            <div class="listing-card">
+              <div class="lc-img" style="background:#f5ede8"><div class="lc-badge draft">Draft</div>🫚</div>
+              <div class="lc-body">
+                <div class="lc-crop">Palm Oil</div>
+                <div class="lc-name">Palm Oil Plantation — New Plot</div>
+                <div class="lc-meta">Pujehun · 0.9 ha · Planting Jul 2025</div>
+                <div class="lc-bar-wrap"><div class="lc-bar" style="width:0%"></div></div>
+                <div class="lc-bar-labels"><span>Not published</span><span>Goal: SLL 3M</span></div>
+                <div class="lc-footer"><div><div class="lc-price">SLL 3M</div><div class="lc-returns">20% est. return</div></div><button class="btn btn-primary" style="font-size:.7rem;padding:.3rem .7rem" onclick="publishListing(this)">Publish</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Recent Activity</div></div>
+          <div class="activity-list">
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(90,138,60,0.12)">💰</div>
+              <div class="act-text"><div class="act-title">New investment received</div><div class="act-sub">Ibrahim S. invested SLL 400k in Rice listing</div></div>
+              <div class="act-time">2h ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(212,168,67,0.12)">📅</div>
+              <div class="act-text"><div class="act-title">Harvest reminder set</div><div class="act-sub">Rice harvest due in 42 days</div></div>
+              <div class="act-time">1d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(58,126,191,0.12)">👤</div>
+              <div class="act-text"><div class="act-title">New investor inquiry</div><div class="act-sub">Fatmata K. asked about Groundnut listing</div></div>
+              <div class="act-time">2d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(90,138,60,0.12)">⭐</div>
+              <div class="act-text"><div class="act-title">Farm verified</div><div class="act-sub">AgroVest team confirmed your farm details</div></div>
+              <div class="act-time">5d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(212,168,67,0.12)">📦</div>
+              <div class="act-text"><div class="act-title">Payout received</div><div class="act-sub">SLL 2.1M from Cassava Season 1 payout</div></div>
+              <div class="act-time">1w ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming harvests mini -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Upcoming Harvests</div><button class="btn btn-outline" onclick="switchPanel('harvest-calendar')" style="font-size:.75rem">Open Calendar</button></div>
+        <table class="inv-table">
+          <thead><tr><th>Crop</th><th>Plot</th><th>Planted</th><th>Expected Harvest</th><th>Days Left</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><span style="margin-right:.4rem">🌾</span>Rice</td><td>Main Plot — 2.1 ha</td><td>Mar 6, 2025</td><td>Jul 18, 2025</td><td><span class="pill amber">42 days</span></td><td><span class="pill green">On track</span></td></tr>
+            <tr><td><span style="margin-right:.4rem">🥜</span>Groundnut</td><td>West Field — 1.2 ha</td><td>Jan 14, 2025</td><td>May 24, 2025</td><td><span class="pill rust">Overdue</span></td><td><span class="pill rust">Harvest now</span></td></tr>
+            <tr><td><span style="margin-right:.4rem">🌿</span>Cassava</td><td>East Slope — 0.9 ha</td><td>Dec 2, 2024</td><td>Sep 2, 2025</td><td><span class="pill green">142 days</span></td><td><span class="pill green">Growing</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ MY FARM ═══════════ -->
+    <div class="panel" id="panel-my-farm">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Farm Management</div>
+          <div class="ph-title">My <em>Farm</em></div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="showToast('Farm report downloaded!')">Export Report</button>
+          <button class="btn btn-primary" onclick="showToast('New crop added!')">+ Add Crop</button>
+        </div>
+      </div>
+
+      <div class="farm-hero">
+        <div class="fh-bg"></div>
+        <div class="fh-inner">
+          <div class="fh-avatar">🌾</div>
+          <div class="fh-info">
+            <div class="fh-crop-tag">✅ AgroVest Verified Farm</div>
+            <div class="fh-name">Koroma Family Farm</div>
+            <div class="fh-loc"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 1.5C4.5 1.5 2.5 3.5 2.5 6c0 3.5 4.5 7.5 4.5 7.5S11.5 9.5 11.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="7" cy="6" r="1.5"/></svg>Bo District, Southern Province, Sierra Leone</div>
+          </div>
+        </div>
+        <div class="fh-stats">
+          <div class="fh-stat"><div class="fh-stat-val">4.2 ha</div><div class="fh-stat-label">Total area</div></div>
+          <div class="fh-stat"><div class="fh-stat-val">3</div><div class="fh-stat-label">Active crops</div></div>
+          <div class="fh-stat"><div class="fh-stat-val">SLL 8.4M</div><div class="fh-stat-label">Total funded</div></div>
+          <div class="fh-stat"><div class="fh-stat-val">94%</div><div class="fh-stat-label">Success rate</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Crop Progress</div><div class="card-sub">This growing season</div></div>
+          <div class="crop-progress">
+            <div class="cp-item">
+              <div class="cp-top"><div class="cp-emoji">🌾</div><div class="cp-info"><div class="cp-name">Lowland Rice</div><div class="cp-sub">Main Plot · 2.1 ha · Planted Mar 6</div></div><div class="cp-pct">68%</div></div>
+              <div class="cp-bar-wrap"><div class="cp-bar" style="width:68%;background:linear-gradient(90deg,var(--moss),var(--sprout))"></div></div>
+              <div class="cp-footer"><span>Germination → Flowering</span><span>Harvest: Jul 18</span></div>
+            </div>
+            <div class="cp-item">
+              <div class="cp-top"><div class="cp-emoji">🥜</div><div class="cp-info"><div class="cp-name">Groundnut</div><div class="cp-sub">West Field · 1.2 ha · Planted Jan 14</div></div><div class="cp-pct">100%</div></div>
+              <div class="cp-bar-wrap"><div class="cp-bar" style="width:100%;background:linear-gradient(90deg,var(--straw),#e8c460)"></div></div>
+              <div class="cp-footer"><span>Ready to harvest!</span><span>⚠️ Overdue</span></div>
+            </div>
+            <div class="cp-item">
+              <div class="cp-top"><div class="cp-emoji">🌿</div><div class="cp-info"><div class="cp-name">Cassava</div><div class="cp-sub">East Slope · 0.9 ha · Planted Dec 2</div></div><div class="cp-pct">38%</div></div>
+              <div class="cp-bar-wrap"><div class="cp-bar" style="width:38%;background:linear-gradient(90deg,var(--sky),#5a9fd4)"></div></div>
+              <div class="cp-footer"><span>Early growth stage</span><span>Harvest: Sep 2</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Farm Details</div><button class="btn btn-outline" onclick="showToast('Details saved!')" style="font-size:.75rem">Save</button></div>
+          <div class="lf-row"><div class="lf-group"><label class="lf-label">Farm name</label><input class="lf-input" value="Koroma Family Farm"></div><div class="lf-group"><label class="lf-label">Total area (ha)</label><input class="lf-input" value="4.2" type="number"></div></div>
+          <div class="lf-group"><label class="lf-label">Location</label><input class="lf-input" value="Bo District, Southern Province"></div>
+          <div class="lf-row"><div class="lf-group"><label class="lf-label">Soil type</label><input class="lf-input" value="Clay loam"></div><div class="lf-group"><label class="lf-label">Water source</label><input class="lf-input" value="River + Borehole"></div></div>
+          <div class="lf-group"><label class="lf-label">Farm description</label><textarea class="lf-input" rows="3" style="resize:vertical">A 4.2 hectare family farm specialising in lowland rice, groundnuts, and cassava cultivation. We use a combination of traditional and modern farming methods.</textarea></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ HARVEST CALENDAR ═══════════ -->
+    <div class="panel" id="panel-harvest-calendar">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Smart Harvest Planner</div>
+          <div class="ph-title">Harvest <em>Calendar</em></div>
+          <div class="ph-sub">Set your planting date — we'll calculate and remind you when to harvest.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="toggleCalendarPanel()">Toggle side panel</button>
+        </div>
+      </div>
+
+      <div class="cal-layout">
+        <!-- CALENDAR -->
+        <div>
+          <div class="cal-card">
+            <div class="cal-nav">
+              <button class="cal-nav-btn" onclick="changeMonth(-1)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg></button>
+              <div class="cal-month" id="cal-month-label">June 2025</div>
+              <button class="cal-nav-btn" onclick="changeMonth(1)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3l5 5-5 5"/></svg></button>
+            </div>
+            <div class="cal-grid" id="cal-grid">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+
+          <!-- legend -->
+          <div style="display:flex;gap:1.2rem;padding:.8rem 1rem;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--bark)"><div style="width:12px;height:12px;border-radius:3px;background:rgba(90,138,60,0.15);border:1.5px solid var(--moss)"></div>Planting date</div>
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--bark)"><div style="width:12px;height:12px;border-radius:3px;background:rgba(212,168,67,0.25);border:1.5px solid var(--straw)"></div>Expected harvest</div>
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--bark)"><div style="width:12px;height:12px;border-radius:3px;background:rgba(90,138,60,0.12)"></div>Today</div>
+          </div>
+        </div>
+
+        <!-- REMINDER SIDEBAR -->
+        <div class="reminder-panel">
+          <!-- ADD REMINDER -->
+          <div class="add-reminder-card">
+            <div class="arc-title">🌱 Add Harvest Reminder</div>
+            <div class="arc-sub">Enter your crop details and planting date</div>
+
+            <div class="arc-field">
+              <div class="arc-label">Crop type</div>
+              <select class="arc-input arc-select" id="arc-crop" onchange="calcHarvest()">
+                <option value="">Select crop…</option>
+                <option value="rice" data-months="4.5">Rice (4–5 months)</option>
+                <option value="cassava" data-months="9">Cassava (9 months)</option>
+                <option value="groundnut" data-months="3.5">Groundnut (3–4 months)</option>
+                <option value="maize" data-months="3">Maize (3 months)</option>
+                <option value="cocoa" data-months="36">Cocoa (3 years, first harvest)</option>
+                <option value="palm油" data-months="48">Palm Oil (4 years, first harvest)</option>
+                <option value="sweet-potato" data-months="4">Sweet Potato (4 months)</option>
+                <option value="vegetables" data-months="2">Leafy Vegetables (2 months)</option>
+                <option value="yam" data-months="7">Yam (7 months)</option>
+                <option value="sorghum" data-months="4">Sorghum (4 months)</option>
+              </select>
+            </div>
+
+            <div class="arc-field">
+              <div class="arc-label">Farm plot name</div>
+              <input type="text" class="arc-input" id="arc-plot" placeholder="e.g. Main Plot, East Field">
+            </div>
+
+            <div class="arc-field">
+              <div class="arc-label">Date planted (or planting date)</div>
+              <input type="date" class="arc-input" id="arc-date" onchange="calcHarvest()">
+            </div>
+
+            <div class="arc-field">
+              <div class="arc-label">Plot size (hectares)</div>
+              <input type="number" class="arc-input" id="arc-size" placeholder="e.g. 1.5" step="0.1" min="0.1">
+            </div>
+
+            <div class="harvest-preview" id="harvest-preview">
+              <div class="hp-label">ESTIMATED HARVEST DATE</div>
+              <div class="hp-date" id="hp-date">—</div>
+              <div class="hp-days" id="hp-days"></div>
+            </div>
+
+            <button class="arc-btn" onclick="addReminder()">Set Harvest Reminder</button>
+          </div>
+
+          <!-- REMINDERS LIST -->
+          <div class="reminders-card">
+            <div class="card-header"><div class="card-title">My Reminders</div><div id="rem-count" class="pill green" style="font-size:.7rem">3 active</div></div>
+            <div class="activity-list" id="reminders-list">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ MY LISTINGS ═══════════ -->
+    <div class="panel" id="panel-my-listings">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Marketplace</div>
+          <div class="ph-title">My <em>Listings</em></div>
+          <div class="ph-sub">Manage the crops you've listed for investor funding.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-primary" onclick="showCreateListingForm('my-listings')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+            Create Listing
+          </button>
+        </div>
+      </div>
+      <div class="listing-form-card" id="listing-form-card">
+        <div class="card-header"><div class="card-title">Add a new listing</div></div>
+        <div class="grid-2" style="gap:1rem;">
+          <div class="card" style="padding:1rem;box-shadow:none;border:none;">
+            <div class="lf-group"><label class="lf-label">Crop type</label><select class="lf-input" id="listing-crop"><option value="">Select crop…</option><option value="rice">Rice</option><option value="groundnut">Groundnut</option><option value="cassava">Cassava</option><option value="maize">Maize</option><option value="palm油">Palm Oil</option><option value="vegetables">Vegetables</option><option value="cocoa">Cocoa</option><option value="sweet-potato">Sweet Potato</option></select></div>
+            <div class="lf-group"><label class="lf-label">Listing name</label><input class="lf-input" id="listing-name" placeholder="e.g. Premium Rice Season 3"></div>
+            <div class="lf-group"><label class="lf-label">Farm plot</label><input class="lf-input" id="listing-plot" placeholder="e.g. Main Plot"></div>
+            <div class="lf-group"><label class="lf-label">Fundraising goal (SLL)</label><input class="lf-input" id="listing-goal" type="number" min="0" step="10000" placeholder="e.g. 5000000"></div>
+          </div>
+          <div class="card" style="padding:1rem;box-shadow:none;border:none;">
+            <div class="lf-group"><label class="lf-label">Estimated return</label><input class="lf-input" id="listing-return" placeholder="e.g. 18%"></div>
+            <div class="lf-group"><label class="lf-label">Status</label><select class="lf-input" id="listing-status"><option value="Live">Live</option><option value="Draft">Draft</option><option value="Funded">Funded</option></select></div>
+            <div class="lf-group"><label class="lf-label">Published</label><div style="display:flex;gap:.75rem"><button class="btn btn-primary" onclick="createListing()" type="button">Save listing</button><button class="btn btn-outline" onclick="hideCreateListingForm()" type="button">Cancel</button></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="listing-grid" id="my-listing-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="listing-card"><div class="lc-img" style="background:#e8f5e0"><div class="lc-badge live">Live</div>🌾</div><div class="lc-body"><div class="lc-crop">Rice</div><div class="lc-name">Premium Lowland Rice — Season 2</div><div class="lc-meta">Bo District · 2.1 ha · Planted Mar 2025</div><div class="lc-bar-wrap"><div class="lc-bar" style="width:72%"></div></div><div class="lc-bar-labels"><span>72% funded</span><span>SLL 3.6M / 5M</span></div><div class="lc-footer"><div><div class="lc-price">SLL 5M</div><div class="lc-returns">18% est. return</div></div><span class="pill green">Active</span></div></div></div>
+        <div class="listing-card"><div class="lc-img" style="background:#fdf6e0"><div class="lc-badge funded">Funded</div>🥜</div><div class="lc-body"><div class="lc-crop">Groundnut</div><div class="lc-name">Groundnut Harvest Batch A</div><div class="lc-meta">Moyamba · 1.2 ha · Planted Jan 2025</div><div class="lc-bar-wrap"><div class="lc-bar" style="width:100%;background:linear-gradient(90deg,var(--straw),#e8c460)"></div></div><div class="lc-bar-labels"><span>Fully funded</span><span>SLL 2.4M</span></div><div class="lc-footer"><div><div class="lc-price">SLL 2.4M</div><div class="lc-returns">22% est. return</div></div><span class="pill amber">Funded</span></div></div></div>
+        <div class="listing-card"><div class="lc-img" style="background:#f5ede8"><div class="lc-badge draft">Draft</div>🫚</div><div class="lc-body"><div class="lc-crop">Palm Oil</div><div class="lc-name">Palm Oil Plantation — New Plot</div><div class="lc-meta">Pujehun · 0.9 ha · Planting Jul 2025</div><div class="lc-bar-wrap"><div class="lc-bar" style="width:0%"></div></div><div class="lc-bar-labels"><span>Not published</span><span>Goal: SLL 3M</span></div><div class="lc-footer"><div><div class="lc-price">SLL 3M</div><div class="lc-returns">20% est. return</div></div><button class="btn btn-primary" style="font-size:.7rem;padding:.3rem .7rem" onclick="publishListing(this)">Publish</button></div></div></div>
+        <div class="listing-card" style="border:1.5px dashed rgba(90,138,60,0.25);cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:200px" onclick="showCreateListingForm()"><div style="text-align:center;color:rgba(74,46,26,0.4)"><div style="font-size:2rem;margin-bottom:.5rem">+</div><div style="font-size:.8rem;font-weight:500">Create new listing</div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ INVESTORS ═══════════ -->
+    <div class="panel" id="panel-investors">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Community</div>
+          <div class="ph-title">My <em>Investors</em></div>
+          <div class="ph-sub">People who have funded your farm operations.</div>
+        </div>
+      </div>
+      <div class="card">
+        <table class="inv-table">
+          <thead><tr><th>Investor</th><th>Crop Funded</th><th>Amount</th><th>Date</th><th>Return %</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div class="inv-av" style="background:rgba(58,126,191,0.12);color:var(--sky)">IS</div>Ibrahim Sesay</div></td><td>🌾 Rice — Season 2</td><td style="font-weight:500">SLL 1.2M</td><td>Jun 1, 2025</td><td><span class="pill green">18%</span></td><td><span class="pill sky">Active</span></td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="showToast('Message sent to Ibrahim!')">Message</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div class="inv-av" style="background:rgba(212,168,67,0.12);color:#8a5f0a">FK</div>Fatmata Kamara</div></td><td>🥜 Groundnut Batch A</td><td style="font-weight:500">SLL 800k</td><td>Mar 20, 2025</td><td><span class="pill amber">22%</span></td><td><span class="pill amber">Payout due</span></td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="showToast('Message sent!')">Message</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div class="inv-av" style="background:rgba(90,138,60,0.12);color:var(--moss)">OT</div>Omar Turay</div></td><td>🌾 Rice — Season 2</td><td style="font-weight:500">SLL 600k</td><td>May 28, 2025</td><td><span class="pill green">18%</span></td><td><span class="pill sky">Active</span></td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="showToast('Message sent!')">Message</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div class="inv-av" style="background:rgba(166,61,47,0.1);color:var(--rust)">AC</div>Adama Conteh</div></td><td>🥜 Groundnut Batch A</td><td style="font-weight:500">SLL 400k</td><td>Feb 10, 2025</td><td><span class="pill amber">22%</span></td><td><span class="pill rust">Paid out</span></td><td><button class="btn btn-outline" style="font-size:.7rem;padding:.3rem .6rem" onclick="showToast('Message sent!')">Message</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ FUNDING ═══════════ -->
+    <div class="panel" id="panel-funding">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Finance</div>
+          <div class="ph-title">Funding <em>Overview</em></div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-straw" onclick="showToast('Withdrawal request submitted!')">Request Payout</button>
+        </div>
+      </div>
+      <div class="funding-header-card">
+        <div class="fhc-left">
+          <div class="fhc-label">Total Raised to Date</div>
+          <div class="fhc-amount">SLL 8,400,000</div>
+          <div class="fhc-sub">Across 3 active crop listings</div>
+        </div>
+        <div class="fhc-right">
+          <div class="fhc-stat"><div class="fhc-stat-val">SLL 2.1M</div><div class="fhc-stat-label">Available to withdraw</div></div>
+          <div class="fhc-stat"><div class="fhc-stat-val">12</div><div class="fhc-stat-label">Active investors</div></div>
+          <div class="fhc-stat"><div class="fhc-stat-val">20%</div><div class="fhc-stat-label">Avg. return offered</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Transaction History</div></div>
+        <table class="inv-table">
+          <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Jun 10, 2025</td><td>Ibrahim Sesay — Rice S2 investment</td><td><span class="pill sky">Received</span></td><td style="color:var(--moss);font-weight:500">+SLL 1.2M</td><td><span class="pill green">Cleared</span></td></tr>
+            <tr><td>May 28, 2025</td><td>Omar Turay — Rice S2 investment</td><td><span class="pill sky">Received</span></td><td style="color:var(--moss);font-weight:500">+SLL 600k</td><td><span class="pill green">Cleared</span></td></tr>
+            <tr><td>May 10, 2025</td><td>Groundnut S1 — payout to investors</td><td><span class="pill rust">Paid out</span></td><td style="color:var(--rust);font-weight:500">-SLL 2.93M</td><td><span class="pill green">Completed</span></td></tr>
+            <tr><td>Mar 20, 2025</td><td>Fatmata Kamara — Groundnut investment</td><td><span class="pill sky">Received</span></td><td style="color:var(--moss);font-weight:500">+SLL 800k</td><td><span class="pill green">Cleared</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ MARKETPLACE ═══════════ -->
+    <div class="panel" id="panel-marketplace">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Buy & Sell</div>
+          <div class="ph-title">Crop <em>Marketplace</em></div>
+          <div class="ph-sub">Browse produce, seeds, and farm inputs from other farmers.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-primary" onclick="showCreateListingForm('my-listings')">Sell My Produce</button>
+        </div>
+      </div>
+      <div class="market-filters">
+        <div class="mf-chip active">All</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Rice</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Cassava</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Groundnut</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Vegetables</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Seeds & Inputs</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Near me</div>
+      </div>
+      <div class="market-grid">
+        <div class="market-card"><div class="mc-img" style="background:#e8f5e0">🌾</div><div class="mc-body"><div class="mc-tag">Rice</div><div class="mc-name">Premium Lowland Rice — 50kg bag</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Sesay Farm, Kenema</div><div class="mc-footer"><div><div class="mc-price">SLL 180k</div><div class="mc-unit">per 50kg bag</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#fdf3e0">🥜</div><div class="mc-body"><div class="mc-tag">Groundnut</div><div class="mc-name">Shelled Groundnut — 25kg sack</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Bangura Agro, Bo</div><div class="mc-footer"><div><div class="mc-price">SLL 95k</div><div class="mc-unit">per 25kg sack</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f0f8e8">🌿</div><div class="mc-body"><div class="mc-tag">Cassava</div><div class="mc-name">Fresh Cassava Stems — Bundle</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Koroma Family Farm</div><div class="mc-footer"><div><div class="mc-price">SLL 25k</div><div class="mc-unit">per bundle (50 stems)</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f5ede8">🌶️</div><div class="mc-body"><div class="mc-tag">Vegetables</div><div class="mc-name">Fresh Pepper — Crate</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Conteh Gardens, Freetown</div><div class="mc-footer"><div><div class="mc-price">SLL 45k</div><div class="mc-unit">per crate (20kg)</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f0f4e0">🌱</div><div class="mc-body"><div class="mc-tag">Seeds & Inputs</div><div class="mc-name">Improved Rice Seed — NERICA 4</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>AgroVest Inputs Store</div><div class="mc-footer"><div><div class="mc-price">SLL 60k</div><div class="mc-unit">per 5kg pack</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#e8eef5">🪣</div><div class="mc-body"><div class="mc-tag">Seeds & Inputs</div><div class="mc-name">Organic Fertiliser — 50kg bag</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>GreenGrow Supplies</div><div class="mc-footer"><div><div class="mc-price">SLL 130k</div><div class="mc-unit">per 50kg bag</div></div><button class="mc-btn" onclick="showToast('Added to cart!')">Order</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ MARKET PRICES ═══════════ -->
+    <div class="panel" id="panel-prices">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Live Market Data</div>
+          <div class="ph-title">Crop <em>Prices</em></div>
+          <div class="ph-sub">Current market prices in Sierra Leone — updated daily.</div>
+        </div>
+      </div>
+      <div class="card">
+        <table class="inv-table">
+          <thead><tr><th>Crop</th><th>Unit</th><th>Market Price</th><th>Last Week</th><th>Change</th><th>District</th></tr></thead>
+          <tbody>
+            <tr><td>🌾 Rice (Local)</td><td>50kg bag</td><td style="font-weight:500">SLL 180,000</td><td>SLL 172,000</td><td><span class="stat-change up" style="font-size:.75rem">▲ +4.7%</span></td><td>Bo / Kenema</td></tr>
+            <tr><td>🥜 Groundnut</td><td>25kg sack</td><td style="font-weight:500">SLL 95,000</td><td>SLL 98,000</td><td><span class="stat-change down" style="font-size:.75rem">▼ -3.1%</span></td><td>Moyamba</td></tr>
+            <tr><td>🌿 Cassava</td><td>100kg bag</td><td style="font-weight:500">SLL 65,000</td><td>SLL 62,000</td><td><span class="stat-change up" style="font-size:.75rem">▲ +4.8%</span></td><td>All districts</td></tr>
+            <tr><td>🌽 Maize</td><td>50kg bag</td><td style="font-weight:500">SLL 120,000</td><td>SLL 120,000</td><td><span style="font-size:.75rem;color:var(--bark)">— 0%</span></td><td>Tonkolili</td></tr>
+            <tr><td>🫚 Palm Oil</td><td>25L container</td><td style="font-weight:500">SLL 210,000</td><td>SLL 198,000</td><td><span class="stat-change up" style="font-size:.75rem">▲ +6.1%</span></td><td>Pujehun</td></tr>
+            <tr><td>☕ Coffee</td><td>25kg bag</td><td style="font-weight:500">SLL 430,000</td><td>SLL 415,000</td><td><span class="stat-change up" style="font-size:.75rem">▲ +3.6%</span></td><td>Kailahun</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ PROFILE ═══════════ -->
+    <div class="panel" id="panel-profile">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Account</div>
+          <div class="ph-title">My <em>Profile</em></div>
+        </div>
+        <div class="ph-actions"><button class="btn btn-primary" onclick="showToast('Profile saved!')">Save Changes</button></div>
+      </div>
+      <div class="profile-grid">
+        <div>
+          <div class="profile-card" style="margin-bottom:1rem">
+            <div class="profile-av">AK</div>
+            <div class="profile-name">Amara Koroma</div>
+            <div class="profile-role">✅ Verified Farmer</div>
+            <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:.78rem" onclick="showToast('Upload photo!')">Change Photo</button>
+            <div class="profile-divider"></div>
+            <div class="profile-stat"><span>Member since</span><strong>Jan 2024</strong></div>
+            <div class="profile-stat"><span>District</span><strong>Bo</strong></div>
+            <div class="profile-stat"><span>Total area</span><strong>4.2 ha</strong></div>
+            <div class="profile-stat"><span>Verification</span><strong style="color:var(--moss)">Verified ✓</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:1rem">Personal Information</div>
+          <div class="lf-row"><div class="lf-group"><label class="lf-label">First name</label><input class="lf-input" value="Amara"></div><div class="lf-group"><label class="lf-label">Last name</label><input class="lf-input" value="Koroma"></div></div>
+          <div class="lf-group"><label class="lf-label">Email</label><input class="lf-input" type="email" value="amara.koroma@example.com"></div>
+          <div class="lf-row"><div class="lf-group"><label class="lf-label">Phone</label><input class="lf-input" value="+232 76 000 000"></div><div class="lf-group"><label class="lf-label">District</label><input class="lf-input" value="Bo District"></div></div>
+          <div class="lf-group"><label class="lf-label">Bio</label><textarea class="lf-input" rows="3" style="resize:vertical">Smallholder farmer with 8 years of experience growing rice and groundnuts in Bo District. Passionate about sustainable agriculture and connecting with investors.</textarea></div>
+          <div class="lf-row"><div class="lf-group"><label class="lf-label">National ID</label><input class="lf-input" value="SL-NID-****-8842" readonly style="opacity:.6"></div><div class="lf-group"><label class="lf-label">Bank / Mobile Money</label><input class="lf-input" value="Orange Money · 076-000000"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function switchPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const ni=document.getElementById('nav-'+id);
+  if(ni) ni.classList.add('active');
+
+  const backBtn=document.getElementById('page-back');
+  backBtn.style.display = id==='overview' ? 'none' : 'block';
+  hideCreateListingForm();
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function logout(){
+  showToast('Logging out...');
+  setTimeout(()=>window.location.href = 'log_in.html', 400);
+}
+
+function toggleSidebar(){
+  document.querySelector('.layout').classList.toggle('sidebar-hidden');
+}
+
+function toggleCalendarPanel(){
+  const calLayout = document.querySelector('.cal-layout');
+  if(calLayout) calLayout.classList.toggle('calendar-hidden');
+}
+
+function showCreateListingForm(panelId){
+  if(panelId) switchPanel(panelId);
+  document.getElementById('listing-form-card').classList.add('active');
+  document.getElementById('listing-name').focus();
+}
+
+function hideCreateListingForm(){
+  document.getElementById('listing-form-card').classList.remove('active');
+}
+
+function createListing(){
+  const crop=document.getElementById('listing-crop').value;
+  const name=document.getElementById('listing-name').value.trim();
+  const plot=document.getElementById('listing-plot').value.trim()||'Unnamed Plot';
+  const goal=document.getElementById('listing-goal').value.trim();
+  const returns=document.getElementById('listing-return').value.trim()||'TBD';
+  const status=document.getElementById('listing-status').value;
+
+  if(!crop||!name||!goal){
+    showToast('Please complete crop, name, and goal before saving.');
+    return;
+  }
+
+  const cropEmoji = CROP_EMOJI[crop]||'🌾';
+  const page = document.getElementById('my-listing-grid');
+  const statusClass = status.toLowerCase();
+  const goalText = Number(goal).toLocaleString();
+  const label = status==='Funded' ? 'Fully funded' : status==='Draft' ? 'Not published' : '0% funded';
+  const barStyle = status==='Funded' ? 'width:100%;background:linear-gradient(90deg,var(--straw),#e8c460)' : 'width:0%';
+  const goalLabel = status==='Draft' ? `Goal: SLL ${goalText}` : `SLL ${goalText}`;
+
+  page.insertAdjacentHTML('beforeend', `<div class="listing-card">
+      <div class="lc-img" style="background:#e8f5e0"><div class="lc-badge ${statusClass}">${status}</div>${cropEmoji}</div>
+      <div class="lc-body">
+        <div class="lc-crop">${CROP_NAMES[crop]||crop}</div>
+        <div class="lc-name">${name}</div>
+        <div class="lc-meta">${plot}</div>
+        <div class="lc-bar-wrap"><div class="lc-bar" style="${barStyle}"></div></div>
+        <div class="lc-bar-labels"><span>${label}</span><span>${goalLabel}</span></div>
+        <div class="lc-footer"><div><div class="lc-price">SLL ${goalText}</div><div class="lc-returns">${returns} est. return</div></div><span class="pill ${statusClass}">${status}</span></div>
+      </div>
+    </div>`);
+
+  hideCreateListingForm();
+  document.getElementById('listing-crop').value='';
+  document.getElementById('listing-name').value='';
+  document.getElementById('listing-plot').value='';
+  document.getElementById('listing-goal').value='';
+  document.getElementById('listing-return').value='';
+  document.getElementById('listing-status').value='Live';
+
+  showToast('✅ Listing added to your dashboard');
+}
+
+function publishListing(button){
+  const card = button.closest('.listing-card');
+  if(!card) return;
+  const badge = card.querySelector('.lc-badge');
+  const bar = card.querySelector('.lc-bar');
+  const labelSpans = card.querySelectorAll('.lc-bar-labels span');
+  const statusPill = card.querySelector('.lc-footer .pill');
+  const footerButton = button;
+
+  if(badge){
+    badge.textContent = 'Live';
+    badge.classList.remove('draft');
+    badge.classList.add('live');
+  }
+  if(bar){
+    bar.style.width = '8%';
+    bar.style.background = 'linear-gradient(90deg,var(--moss),var(--sprout))';
+  }
+  if(labelSpans.length>=1){
+    labelSpans[0].textContent = '0% funded';
+  }
+  if(labelSpans.length>=2){
+    labelSpans[1].textContent = labelSpans[1].textContent.replace('Goal: ', 'SLL ');
+  }
+  if(statusPill){
+    statusPill.textContent = 'Active';
+    statusPill.className = 'pill green';
+  }
+  footerButton.textContent = 'Published';
+  footerButton.disabled = true;
+  footerButton.style.opacity = '0.65';
+  footerButton.style.cursor = 'not-allowed';
+
+  showToast('✅ Listing published');
+}
+
+// ── CHIP TOGGLE ──
+function toggleChip(el){
+  document.querySelectorAll('.mf-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── HARVEST CALENDAR ──
+const HARVEST_MONTHS = {
+  'rice':4.5,'cassava':9,'groundnut':3.5,'maize':3,'cocoa':36,
+  'palm油':48,'sweet-potato':4,'vegetables':2,'yam':7,'sorghum':4
+};
+const CROP_EMOJI = {
+  'rice':'🌾','cassava':'🌿','groundnut':'🥜','maize':'🌽','cocoa':'☕',
+  'palm油':'🫚','sweet-potato':'🍠','vegetables':'🥬','yam':'🫛','sorghum':'🌾'
+};
+const CROP_NAMES = {
+  'rice':'Rice','cassava':'Cassava','groundnut':'Groundnut','maize':'Maize',
+  'cocoa':'Cocoa','palm油':'Palm Oil','sweet-potato':'Sweet Potato',
+  'vegetables':'Vegetables','yam':'Yam','sorghum':'Sorghum'
+};
+
+let calYear=2025, calMonth=5; // June 2025 (0-indexed)
+
+// existing reminders
+let reminders=[
+  {id:1,crop:'rice',plot:'Main Plot',planted:'2025-03-06',harvest:'2025-07-18',size:2.1},
+  {id:2,crop:'groundnut',plot:'West Field',planted:'2025-01-14',harvest:'2025-05-21',size:1.2},
+  {id:3,crop:'cassava',plot:'East Slope',planted:'2024-12-02',harvest:'2025-09-02',size:0.9}
+];
+
+function renderCalendar(){
+  const grid=document.getElementById('cal-grid');
+  const label=document.getElementById('cal-month-label');
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent=monthNames[calMonth]+' '+calYear;
+
+  // day headers
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html=days.map(d=>`<div class="cal-day-head">${d}</div>`).join('');
+
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+
+  // blank cells
+  for(let i=0;i<firstDay;i++) html+=`<div class="cal-day empty"></div>`;
+
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const isPast=new Date(dateStr)<today&&!isToday;
+
+    let cls='cal-day';
+    let icon='';
+    if(isToday) cls+=' today';
+    if(isPast) cls+=' past';
+
+    // check reminders
+    const plantMatch=reminders.find(r=>r.planted===dateStr);
+    const harvestMatch=reminders.find(r=>r.harvest===dateStr);
+    if(plantMatch){cls+=' plant-day';icon=CROP_EMOJI[plantMatch.crop]||'🌱';}
+    if(harvestMatch){cls+=' harvest-day';icon=(CROP_EMOJI[harvestMatch.crop]||'🌾');}
+
+    html+=`<div class="${cls}" onclick="dayClick('${dateStr}')">
+      <span class="cal-day-num">${d}</span>
+      ${icon?`<span class="cal-day-icon">${icon}</span>`:''}
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+
+function dayClick(dateStr){
+  const plant=reminders.find(r=>r.planted===dateStr);
+  const harvest=reminders.find(r=>r.harvest===dateStr);
+  if(plant) showToast(`🌱 Planted: ${CROP_NAMES[plant.crop]} — ${plant.plot}`);
+  else if(harvest) showToast(`🌾 Harvest due: ${CROP_NAMES[harvest.crop]} — ${harvest.plot}`);
+}
+
+function changeMonth(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+
+function calcHarvest(){
+  const cropEl=document.getElementById('arc-crop');
+  const dateEl=document.getElementById('arc-date');
+  const preview=document.getElementById('harvest-preview');
+  const crop=cropEl.value;
+  const dateVal=dateEl.value;
+  if(!crop||!dateVal){preview.style.display='none';return;}
+
+  const months=HARVEST_MONTHS[crop];
+  const planted=new Date(dateVal);
+  const harvest=new Date(planted);
+  harvest.setDate(harvest.getDate()+Math.round(months*30.4));
+
+  const options={year:'numeric',month:'long',day:'numeric'};
+  document.getElementById('hp-date').textContent=harvest.toLocaleDateString('en-GB',options);
+
+  const now=new Date();
+  const diffDays=Math.round((harvest-now)/(1000*60*60*24));
+  const diffText=diffDays>0?`${diffDays} days from today`:'This date has already passed';
+  document.getElementById('hp-days').textContent=diffText;
+  preview.style.display='block';
+}
+
+function addReminder(){
+  const crop=document.getElementById('arc-crop').value;
+  const plot=document.getElementById('arc-plot').value.trim();
+  const dateVal=document.getElementById('arc-date').value;
+  const size=parseFloat(document.getElementById('arc-size').value)||0;
+
+  if(!crop||!dateVal){showToast('Please fill in crop type and planting date.');return;}
+
+  const months=HARVEST_MONTHS[crop];
+  const planted=new Date(dateVal);
+  const harvest=new Date(planted);
+  harvest.setDate(harvest.getDate()+Math.round(months*30.4));
+
+  const fmt=d=>d.toISOString().split('T')[0];
+  const newRem={
+    id:Date.now(),
+    crop,
+    plot:plot||'Unnamed Plot',
+    planted:fmt(planted),
+    harvest:fmt(harvest),
+    size
+  };
+  reminders.push(newRem);
+  renderReminders();
+  renderCalendar();
+
+  // navigate calendar to harvest month
+  calYear=harvest.getFullYear();
+  calMonth=harvest.getMonth();
+  renderCalendar();
+
+  // reset
+  document.getElementById('arc-crop').value='';
+  document.getElementById('arc-plot').value='';
+  document.getElementById('arc-date').value='';
+  document.getElementById('arc-size').value='';
+  document.getElementById('harvest-preview').style.display='none';
+
+  showToast(`✅ Harvest reminder set for ${harvest.toLocaleDateString('en-GB',{month:'long',day:'numeric',year:'numeric'})}`);
+}
+
+function deleteReminder(id){
+  reminders=reminders.filter(r=>r.id!==id);
+  renderReminders();
+  renderCalendar();
+  showToast('Reminder removed.');
+}
+
+function renderReminders(){
+  const list=document.getElementById('reminders-list');
+  const count=document.getElementById('rem-count');
+  const now=new Date();
+
+  count.textContent=reminders.length+' active';
+
+  if(!reminders.length){
+    list.innerHTML=`<div style="text-align:center;padding:1rem;color:rgba(74,46,26,.35);font-size:.8rem">No reminders yet. Add your first crop above.</div>`;
+    return;
+  }
+
+  list.innerHTML=reminders.map(r=>{
+    const harvestDate=new Date(r.harvest);
+    const diffDays=Math.round((harvestDate-now)/(1000*60*60*24));
+    let countdownClass='future', countdownText=`In ${diffDays} days`;
+    if(diffDays<0){countdownClass='past';countdownText='Overdue!';}
+    else if(diffDays<=14){countdownClass='soon';countdownText=`${diffDays}d — Soon!`;}
+
+    const harvestFmt=harvestDate.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const plantedDate=new Date(r.planted).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+
+    return `<div class="rem-item">
+      <div class="rem-icon" style="background:rgba(212,168,67,0.1)">${CROP_EMOJI[r.crop]||'🌱'}</div>
+      <div class="rem-body">
+        <div class="rem-crop">${CROP_NAMES[r.crop]||r.crop}</div>
+        <div class="rem-name">${r.plot}${r.size?' — '+r.size+' ha':''}</div>
+        <div class="rem-date">Planted ${plantedDate} · Harvest ${harvestFmt}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem">
+        <span class="rem-countdown ${countdownClass}">${countdownText}</span>
+        <button class="rem-delete" onclick="deleteReminder(${r.id})" title="Remove"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 4 12 4"/><path d="M5 4V2.5h4V4M4.5 4l.7 7.5h5.6L11.5 4"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// init
+renderCalendar();
+renderReminders();
+// set today's date as default in date picker
+document.getElementById('arc-date').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>

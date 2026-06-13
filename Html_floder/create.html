@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroVest — Create Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css_floder/create.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="#">Agro<span>Vest</span></a>
+
+    <div class="nav-step">
+      <div class="step-dot active" id="dot-1">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="dot-2">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot" id="dot-3">3</div>
+    </div>
+
+    <button class="nav-back" onclick="goBack()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Back
+    </button>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- â”€â”€ LEFT PANEL â”€â”€ -->
+    <div class="left-panel">
+      <div class="lp-accent"></div>
+      <div class="lp-tag">Join the community</div>
+
+      <h2 class="lp-heading">
+        Grow with us.<br>
+        <em>Choose your role.</em>
+      </h2>
+
+      <p class="lp-desc">
+        Whether you're working the land or funding the future of agriculture â€” AgroVest was built for both of you.
+      </p>
+
+      <div class="role-previews">
+        <div class="rp-card">
+          <div class="rp-icon farmer">🌾</div>
+          <div class="rp-text">
+            <div class="rp-title">Register as a Farmer</div>
+            <div class="rp-sub">List your farm, attract investors, grow your harvest</div>
+          </div>
+          <div class="rp-badge farmer">Farmer</div>
+        </div>
+        <div class="rp-card">
+          <div class="rp-icon investor">📈</div>
+          <div class="rp-text">
+            <div class="rp-title">Register as an Investor</div>
+            <div class="rp-sub">Fund farms, earn returns, support local agriculture</div>
+          </div>
+          <div class="rp-badge investor">Investor</div>
+        </div>
+      </div>
+
+      <div class="lp-stats">
+        <div class="lps"><div class="lps-num">3,800+</div><div class="lps-label">Farmers onboarded</div></div>
+        <div class="lps"><div class="lps-num">SLL 12B</div><div class="lps-label">Invested to date</div></div>
+        <div class="lps"><div class="lps-num">94%</div><div class="lps-label">Harvest success</div></div>
+      </div>
+    </div>
+
+    <!-- â”€â”€ RIGHT PANEL â”€â”€ -->
+    <div class="right-panel">
+      <div class="progress-bar"><div class="progress-fill" id="progress" style="width:33%"></div></div>
+
+      <!-- â”€â”€ STEP 1 â€” Choose Role â”€â”€ -->
+      <div class="step-screen active" id="step-1">
+        <div class="form-heading">Create your<br><em>account.</em></div>
+        <p class="form-sub">Start by telling us who you are. You can always add more details later.</p>
+
+        <div class="role-selector">
+          <!-- FARMER -->
+          <div class="role-card farmer" id="card-farmer" onclick="selectRole('farmer')">
+            <div class="role-check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2 6 5 9 10 3"/>
+              </svg>
+            </div>
+            <span class="role-emoji">🌾</span>
+            <div class="role-name">Farmer</div>
+            <div class="role-desc">Register your farm and connect with investors who believe in what you grow.</div>
+            <div class="role-perks">
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                List farm & crops
+              </div>
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                Access funding pool
+              </div>
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                Track harvest progress
+              </div>
+            </div>
+          </div>
+
+          <!-- INVESTOR -->
+          <div class="role-card investor" id="card-investor" onclick="selectRole('investor')">
+            <div class="role-check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2 6 5 9 10 3"/>
+              </svg>
+            </div>
+            <span class="role-emoji">📈</span>
+            <div class="role-name">Investor</div>
+            <div class="role-desc">Fund local farms, earn returns, and be part of Sierra Leone's agricultural future.</div>
+            <div class="role-perks">
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                Browse farm listings
+              </div>
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                Track ROI & payouts
+              </div>
+              <div class="role-perk">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 6 5 9 10 3"/></svg>
+                Portfolio dashboard
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="btn-step1" onclick="goStep(2)" disabled>
+          Continue
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+
+        <div class="or-row">
+          <div class="or-line"></div>
+          <span class="or-text">or sign up with</span>
+          <div class="or-line"></div>
+        </div>
+
+        <div class="social-row">
+          <button class="social-btn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.5 12.23c0-.77-.07-1.52-.2-2.23H12v4.26h5.92a5.08 5.08 0 01-2.2 3.33v2.77h3.56C21.3 18.35 22.5 15.53 22.5 12.23z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.64l-3.56-2.77c-.98.66-2.23 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.12A6.8 6.8 0 015.45 12c0-.73.13-1.44.39-2.12V7.04H2.18A11 11 0 001 12c0 1.77.42 3.45 1.18 4.96l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" fill="#EA4335"/>
+            </svg>
+            Google
+          </button>
+          <button class="social-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            Phone OTP
+          </button>
+        </div>
+
+        <div class="signin-row">
+          <p>Already have an account?</p>
+          <a href="log_in.html">Sign in instead</a>
+        </div>
+      </div>
+
+      <!-- â”€â”€ STEP 2 â€” Personal Details â”€â”€ -->
+      <div class="step-screen" id="step-2">
+        <button class="btn-back" onclick="goStep(1)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+          Back
+        </button>
+
+        <div class="form-heading" id="step2-heading">Personal<br><em>details.</em></div>
+        <p class="form-sub" id="step2-sub">Tell us a little about yourself so we can set up your profile.</p>
+
+        <div class="fields" id="step2-fields">
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">First name</label>
+              <div class="field-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zm-5 6a5 5 0 0110 0"/></svg>
+                <input type="text" id="first-name" placeholder="e.g. Amara">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Last name</label>
+              <div class="field-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 8a3 3 0 100-6 3 3 0 000 6zm-5 6a5 5 0 0110 0"/></svg>
+                <input type="text" id="last-name" placeholder="e.g. Koroma">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Email address</label>
+            <div class="field-wrap">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 5l7 5 7-5"/></svg>
+              <input type="email" id="email" placeholder="you@example.com">
+          </div>
+            </div>
+
+          <div class="field-group">
+            <label class="field-label">Phone number</label>
+            <div class="field-wrap">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="1" width="8" height="14" rx="1.5"/><line x1="8" y1="12" x2="8.01" y2="12"/></svg>
+              <input type="tel" id="phone" placeholder="+232 76 000 000">
+          </div>
+            </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">District</label>
+              <div class="field-wrap select-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                <select>
+                  <option value="" disabled selected>Select district</option>
+                  <option>Western Area</option>
+                  <option>Bo</option>
+                  <option>Kenema</option>
+                  <option>Makeni</option>
+                  <option>Kailahun</option>
+                  <option>Kono</option>
+                  <option>Pujehun</option>
+                  <option>Moyamba</option>
+                  <option>Bonthe</option>
+                  <option>Kambia</option>
+                  <option>Koinadugu</option>
+                  <option>Tonkolili</option>
+                  <option>Port Loko</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Gender</label>
+              <div class="field-wrap select-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="6" r="3"/><path d="M5 14s.5-4 3-4 3 4 3 4"/></svg>
+                <select>
+                  <option value="" disabled selected>Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- FARMER-ONLY fields (shown/hidden via JS) -->
+          <div id="farmer-fields">
+            <div class="field-group" style="margin-bottom:0.9rem">
+              <label class="field-label">Farm name</label>
+              <div class="field-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 14V8l7-6 7 6v6H1z"/><rect x="5" y="9" width="6" height="5"/></svg>
+                <input type="text" id="farm-name" placeholder="e.g. Koroma Family Farm">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Primary crop / livestock</label>
+              <div class="field-wrap select-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 14V6M8 6C8 3 11 1 14 2M8 6C8 3 5 1 2 2"/></svg>
+                <select id="crop">
+                  <option value="" disabled selected>What do you grow?</option>
+                  <option>Rice</option>
+                  <option>Cassava</option>
+                  <option>Groundnut</option>
+                  <option>Cocoa</option>
+                  <option>Coffee</option>
+                  <option>Palm Oil</option>
+                  <option>Vegetables</option>
+                  <option>Livestock</option>
+                  <option>Fish farming</option>
+                  <option>Mixed farming</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- INVESTOR-ONLY fields -->
+          <div id="investor-fields" style="display:none">
+            <div class="field-group" style="margin-bottom:0.9rem">
+              <label class="field-label">Occupation / Profession</label>
+              <div class="field-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="5" width="14" height="9" rx="1"/><path d="M5 5V3a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                <input type="text" id="occupation" placeholder="e.g. Business owner, Teacher">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Investment budget range</label>
+              <div class="field-wrap select-wrap">
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v1.5m0 5V12m-2-4.5h3a1 1 0 010 2H7a1 1 0 000 2h3"/></svg>
+                <select id="budget">
+                  <option value="" disabled selected>Select range</option>
+                  <option>SLL 500k â€“ 2M</option>
+                  <option>SLL 2M â€“ 10M</option>
+                  <option>SLL 10M â€“ 50M</option>
+                  <option>SLL 50M+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="btn-step2" style="margin-top:1.2rem" onclick="goStep(3)">
+          Continue
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+
+      <!-- â”€â”€ STEP 3 â€” Set Password â”€â”€ -->
+      <div class="step-screen" id="step-3">
+        <button class="btn-back" onclick="goStep(2)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+          Back
+        </button>
+
+        <div class="form-heading">Almost<br><em>there.</em></div>
+        <p class="form-sub">Create a secure password to protect your account.</p>
+
+        <div class="fields">
+          <div class="field-group">
+            <label class="field-label">Create password</label>
+            <div class="field-wrap">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="7" width="12" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>
+              <input type="password" id="pw1" placeholder="Min. 8 characters" oninput="checkStrength(this.value)">
+              <button class="pw-toggle" type="button" onclick="togglePw('pw1','eye1')" aria-label="Toggle">
+                <svg id="eye1" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                  <path d="M1 8S3.5 3 8 3s7 5 7 5-2.5 5-7 5S1 8 1 8z"/>
+                  <circle cx="8" cy="8" r="2"/>
+                </svg>
+              </button>
+            </div>
+            <div class="pw-strength">
+              <div class="pw-bar-track"><div class="pw-bar-fill" id="pw-bar"></div></div>
+              <div class="pw-hint" id="pw-hint">Use 8+ characters, a number, and a symbol</div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Confirm password</label>
+            <div class="field-wrap">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="7" width="12" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>
+              <input type="password" id="pw2" placeholder="Repeat password">
+              <button class="pw-toggle" type="button" onclick="togglePw('pw2','eye2')" aria-label="Toggle">
+                <svg id="eye2" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                  <path d="M1 8S3.5 3 8 3s7 5 7 5-2.5 5-7 5S1 8 1 8z"/>
+                  <circle cx="8" cy="8" r="2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Referral code <span style="opacity:.4;font-weight:300">(optional)</span></label>
+            <div class="field-wrap">
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 8h8M10 5l3 3-3 3"/></svg>
+              <input type="text" placeholder="e.g. AGRO-2024">
+            </div>
+            <div class="field-note">Have a friend on AgroVest? Enter their code and both get a bonus.</div>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="terms" onchange="checkTerms()">
+            <label class="terms-text" for="terms">
+              I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I understand my farm or investment data will be handled securely and in accordance with Sierra Leone's data protection laws.
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="btn-step3" style="margin-top:1.2rem" onclick="goStep(4)" disabled>
+          Create My Account
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+
+      <!-- â”€â”€ STEP 4 â€” Success â”€â”€ -->
+      <div class="step-screen" id="step-4">
+        <div class="success-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 16 13 23 26 9"/>
+          </svg>
+        </div>
+
+        <div class="form-heading" id="success-heading">Welcome to<br><em>AgroVest!</em></div>
+        <p class="form-sub" id="success-sub">Your account has been created. Here's what you can do next.</p>
+
+        <div class="success-perks" id="success-perks">
+          <!-- filled by JS -->
+        </div>
+
+        <button class="btn-submit" id="btn-success" type="button" onclick="goToSelectedDashboard()">
+          Go to my dashboard
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+
+        <div class="dashboard-links" id="dashboard-links" style="display:none; margin-top:1.2rem; gap:0.9rem; flex-wrap:wrap;"></div>
+        <div id="dashboard-error" style="display:none; margin-top:1rem; color:#E24B4A; font-size:0.9rem; font-weight:600;"></div>
+      </div>
+
+    </div><!-- end right panel -->
+  </div><!-- end page-wrap -->
+
+  <script src="../Javascript/create.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVest — Investor Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css_floder/farmer_dashboard.css">
+</head>
+<body>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2 7 5.5 11 12 3"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- INVEST MODAL -->
+<div class="modal-bg" id="invest-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    <div class="modal-title" id="modal-farm-name">Invest in Farm</div>
+    <div class="modal-sub" id="modal-farm-sub">Enter the amount you'd like to invest</div>
+
+    <div style="background:#FAF5E8;border-radius:10px;padding:0.9rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem">
+      <div style="font-size:1.8rem" id="modal-emoji">🌾</div>
+      <div>
+        <div style="font-size:0.82rem;font-weight:500;color:var(--soil)" id="modal-crop-name">Rice — Main Plot</div>
+        <div style="font-size:0.72rem;color:var(--bark)" id="modal-farmer-name">Amara Koroma · Bo District</div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.3rem">
+          <span class="pill pill-green" id="modal-return-pill">18% return</span>
+          <span class="pill pill-gold" id="modal-duration-pill">5 months</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.75rem;font-weight:500;color:var(--bark);margin-bottom:0.5rem">Quick select amount</div>
+    <div class="invest-amounts">
+      <div class="amount-btn" onclick="selectAmount(500000,this)">SLL 500k</div>
+      <div class="amount-btn" onclick="selectAmount(1000000,this)">SLL 1M</div>
+      <div class="amount-btn" onclick="selectAmount(2000000,this)">SLL 2M</div>
+      <div class="amount-btn" onclick="selectAmount(5000000,this)">SLL 5M</div>
+      <div class="amount-btn" onclick="selectAmount(10000000,this)">SLL 10M</div>
+      <div class="amount-btn" onclick="selectAmount(0,this)">Custom</div>
+    </div>
+
+    <div class="lf-group">
+      <label class="lf-label">Investment amount (SLL)</label>
+      <input class="lf-input" type="number" id="invest-amount" placeholder="e.g. 1000000" oninput="calcReturns()">
+    </div>
+
+    <div class="returns-preview" id="returns-preview" style="display:none">
+      <div class="rp-row"><span class="rp-label">Amount invested</span><span class="rp-val" id="rp-invested">—</span></div>
+      <div class="rp-row"><span class="rp-label">Expected return rate</span><span class="rp-val" id="rp-rate">—</span></div>
+      <div class="rp-row"><span class="rp-label">Profit at harvest</span><span class="rp-val up" id="rp-profit">—</span></div>
+      <div class="divider-line"></div>
+      <div class="rp-row rp-total"><span class="rp-label">Total payout at harvest</span><span class="rp-val" id="rp-total">—</span></div>
+    </div>
+
+    <div class="lf-group">
+      <label class="lf-label">Payment method</label>
+      <select class="lf-input" style="appearance:none">
+        <option>Orange Money — 076-999-000</option>
+        <option>Africell Money — 030-000-111</option>
+        <option>Bank Transfer — GTBank SL</option>
+        <option>AgroVest Wallet (SLL 4.2M available)</option>
+      </select>
+    </div>
+
+    <div style="font-size:0.72rem;color:rgba(74,46,26,0.45);margin-bottom:1rem;line-height:1.6">
+      By investing you agree to AgroVest's <a href="#" style="color:var(--moss)">investment terms</a>. Returns are estimated and subject to harvest outcomes.
+    </div>
+
+    <button class="btn btn-gold" style="width:100%;justify-content:center;font-size:0.9rem;padding:0.8rem" onclick="confirmInvest()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>
+      Confirm Investment
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-logo">Agro<span>Vest</span></div>
+      <div class="investor-badge">Investor</div>
+    </div>
+    <div class="topbar-search">
+      <div class="search-wrap">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+        <input type="text" placeholder="Search farms, crops, districts…">
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn" onclick="showToast('Market prices updated daily at 6am')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1 11 5 6 8 9 11 5 15 8"/></svg>
+      </div>
+      <div class="icon-btn" onclick="switchPanel('watchlist')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+      <div class="icon-btn">
+        <div class="notif-dot"></div>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 1.5a4.5 4.5 0 014.5 4.5c0 4 1.5 5 1.5 5H2S3.5 10 3.5 6A4.5 4.5 0 018 1.5z"/><path d="M6.5 13.5a1.5 1.5 0 003 0"/></svg>
+      </div>
+      <div class="topbar-user" onclick="switchPanel('profile')">
+        <div class="user-av">FB</div>
+        <div>
+          <div class="user-name">Fatmata Bangura</div>
+          <div class="user-role">Verified Investor</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Invest</div>
+    <div class="nav-item active" id="nav-overview" onclick="switchPanel('overview')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Overview
+    </div>
+    <div class="nav-item" id="nav-browse" onclick="switchPanel('browse')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3l2 2"/></svg>
+      Browse Farms
+      <span class="nav-badge green">24</span>
+    </div>
+    <div class="nav-item" id="nav-marketplace" onclick="switchPanel('marketplace')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 3h14l-1.5 6H2.5L1 3z"/><path d="M5.5 14a.5.5 0 100-1 .5.5 0 000 1z" fill="currentColor"/><path d="M11.5 14a.5.5 0 100-1 .5.5 0 000 1z" fill="currentColor"/></svg>
+      Marketplace
+      <span class="nav-badge gold">Buy</span>
+    </div>
+    <div class="nav-item" id="nav-portfolio" onclick="switchPanel('portfolio')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1.5" y="4" width="13" height="10" rx="1.5"/><path d="M5 4V2.5a1 1 0 011-1h4a1 1 0 011 1V4"/></svg>
+      My Portfolio
+    </div>
+    <div class="nav-item" id="nav-returns" onclick="switchPanel('returns')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="1 11 5 6 8 9 11 5 15 8"/></svg>
+      Returns & Payouts
+      <span class="nav-badge gold">1</span>
+    </div>
+    <div class="nav-item" id="nav-watchlist" onclick="switchPanel('watchlist')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
+      Watchlist
+      <span class="nav-badge gold">5</span>
+    </div>
+
+    <div class="sidebar-section">Insights</div>
+    <div class="nav-item" id="nav-market" onclick="switchPanel('market')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="9" width="3" height="5"/><rect x="6.5" y="5" width="3" height="9"/><rect x="12" y="1" width="3" height="13"/></svg>
+      Market Insights
+    </div>
+    <div class="nav-item" id="nav-farmers" onclick="switchPanel('farmers')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="6" cy="5" r="2.5"/><path d="M1 13s.5-4.5 5-4.5 5 4.5 5 4.5"/><path d="M12 7.5c1.5 0 2.5 1 2.5 2.5 0 2-2.5 3-2.5 3"/></svg>
+      Farmers
+    </div>
+
+    <div class="sidebar-section">Account</div>
+    <div class="nav-item" id="nav-transactions" onclick="switchPanel('transactions')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 5h14M4 1l-3 4M12 1l3 4M1 11h14M4 15l-3-4M12 15l3-4"/></svg>
+      Transactions
+    </div>
+    <div class="nav-item" id="nav-profile" onclick="switchPanel('profile')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2 14s.5-5 6-5 6 5 6 5"/></svg>
+      Profile
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="wallet-card">
+        <div class="wc-label">Wallet Balance</div>
+        <div class="wc-amount">SLL 4,200,000</div>
+        <button class="wc-btn" onclick="showToast('Top-up via Orange Money or Bank Transfer')">+ Top Up Wallet</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-back" id="page-back" style="display:none; margin-bottom:1.2rem;">
+      <button class="btn btn-outline btn-sm" onclick="switchPanel('overview')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+        Back to overview
+      </button>
+    </div>
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div class="panel active" id="panel-overview">
+      <div class="kyc-banner">
+        <div class="kyc-icon">🔐</div>
+        <div class="kyc-text">
+          <div class="kyc-title">Complete your KYC to unlock higher investment limits</div>
+          <div class="kyc-sub">Upload your National ID to invest above SLL 10M per crop listing.</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="showToast('KYC form opened!')">Complete KYC</button>
+      </div>
+
+      <div class="ph" style="margin-bottom:1.2rem">
+        <div>
+          <div class="ph-eyebrow">Good morning 📈</div>
+          <div class="ph-title">Welcome back, <em>Fatmata</em></div>
+          <div class="ph-sub">Your portfolio is growing. A payout is due in 12 days.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="switchPanel('portfolio')">View Portfolio</button>
+          <button class="btn btn-gold" onclick="switchPanel('browse')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+            Invest Now
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card sc-gold">
+          <div class="stat-icon" style="background:rgba(212,168,67,0.12)">💰</div>
+          <div class="stat-val">SLL 18.6M</div>
+          <div class="stat-label">Total invested</div>
+          <div class="stat-change up">▲ +SLL 3.2M this season</div>
+        </div>
+        <div class="stat-card sc-green">
+          <div class="stat-icon" style="background:rgba(90,138,60,0.12)">📈</div>
+          <div class="stat-val">SLL 3.4M</div>
+          <div class="stat-label">Total returns earned</div>
+          <div class="stat-change up">▲ 18.3% avg. return</div>
+        </div>
+        <div class="stat-card sc-sky">
+          <div class="stat-icon" style="background:rgba(58,126,191,0.12)">🌾</div>
+          <div class="stat-val">7</div>
+          <div class="stat-label">Active investments</div>
+          <div class="stat-change up">▲ 2 new this month</div>
+        </div>
+        <div class="stat-card sc-rust">
+          <div class="stat-icon" style="background:rgba(166,61,47,0.1)">📅</div>
+          <div class="stat-val">SLL 2.1M</div>
+          <div class="stat-label">Payout due soon</div>
+          <div class="stat-change" style="color:var(--straw)">⏱ Due in 12 days</div>
+        </div>
+      </div>
+
+      <div class="grid-6-4" style="margin-bottom:1.2rem">
+        <div class="card">
+          <div class="card-hd">
+            <div><div class="card-title">My Active Investments</div><div class="card-sub">Currently funded farms</div></div>
+            <button class="btn btn-outline btn-sm" onclick="switchPanel('portfolio')">View all</button>
+          </div>
+          <div>
+            <div class="portfolio-item">
+              <div class="pi-icon" style="background:#e8f5e0">🌾</div>
+              <div class="pi-info">
+                <div class="pi-crop">Rice</div>
+                <div class="pi-name">Premium Lowland Rice — Koroma Farm</div>
+                <div class="pi-farmer">Amara Koroma · Bo District</div>
+                <div class="pi-bar-wrap"><div class="pi-bar" style="width:68%"></div></div>
+              </div>
+              <div class="pi-right">
+                <div class="pi-amount">SLL 1.5M</div>
+                <div class="pi-return">+18% return</div>
+                <div class="pi-status"><span class="pill pill-green">Active</span></div>
+              </div>
+            </div>
+            <div class="portfolio-item">
+              <div class="pi-icon" style="background:#fdf6e0">🥜</div>
+              <div class="pi-info">
+                <div class="pi-crop">Groundnut</div>
+                <div class="pi-name">Groundnut Batch A — Bangura Farm</div>
+                <div class="pi-farmer">Ibrahim Bangura · Moyamba</div>
+                <div class="pi-bar-wrap"><div class="pi-bar" style="width:100%;background:linear-gradient(90deg,var(--straw),#e8c460)"></div></div>
+              </div>
+              <div class="pi-right">
+                <div class="pi-amount">SLL 800k</div>
+                <div class="pi-return">+22% return</div>
+                <div class="pi-status"><span class="pill pill-gold">Payout due</span></div>
+              </div>
+            </div>
+            <div class="portfolio-item">
+              <div class="pi-icon" style="background:#f0f4e0">🌿</div>
+              <div class="pi-info">
+                <div class="pi-crop">Cassava</div>
+                <div class="pi-name">Cassava Season 2 — Sesay Farm</div>
+                <div class="pi-farmer">Mariatu Sesay · Kenema</div>
+                <div class="pi-bar-wrap"><div class="pi-bar" style="width:38%"></div></div>
+              </div>
+              <div class="pi-right">
+                <div class="pi-amount">SLL 600k</div>
+                <div class="pi-return">+20% return</div>
+                <div class="pi-status"><span class="pill pill-sky">Growing</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Recent Activity</div></div>
+          <div class="activity-list">
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(212,168,67,0.12)">💰</div>
+              <div class="act-text"><div class="act-title">Payout incoming</div><div class="act-sub">SLL 976k from Groundnut Batch A</div></div>
+              <div class="act-time">Due Jun 19</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(90,138,60,0.12)">✅</div>
+              <div class="act-text"><div class="act-title">Investment confirmed</div><div class="act-sub">SLL 600k in Cassava S2 — Sesay Farm</div></div>
+              <div class="act-time">2d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(58,126,191,0.12)">🌾</div>
+              <div class="act-text"><div class="act-title">New farm listed</div><div class="act-sub">Palm oil farm — Pujehun (24% return)</div></div>
+              <div class="act-time">3d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(212,168,67,0.12)">📨</div>
+              <div class="act-text"><div class="act-title">Farmer update</div><div class="act-sub">Amara K.: Rice crop flowering on schedule</div></div>
+              <div class="act-time">5d ago</div>
+            </div>
+            <div class="act-item">
+              <div class="act-dot" style="background:rgba(90,138,60,0.12)">💵</div>
+              <div class="act-text"><div class="act-title">Payout received</div><div class="act-sub">SLL 1.32M from Rice Season 1</div></div>
+              <div class="act-time">2w ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hot opportunities -->
+      <div class="card">
+        <div class="card-hd">
+          <div><div class="card-title">🔥 Hot Opportunities</div><div class="card-sub">Top-rated farms accepting investment now</div></div>
+          <button class="btn btn-outline btn-sm" onclick="switchPanel('browse')">Browse all farms</button>
+        </div>
+        <div class="opp-grid">
+          <div class="opp-card" onclick="openModal('Premium Lowland Rice — Season 3','Amara Koroma · Bo District','🌾','Rice',18,5)">
+            <div class="opp-img" style="background:#e8f5e0"><div class="opp-tag tag-hot">🔥 Hot</div><div class="opp-return">18% return</div>🌾</div>
+            <div class="opp-body"><div class="opp-crop">Rice</div><div class="opp-name">Premium Lowland Rice — Season 3</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Amara Koroma · Bo District</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:55%"></div></div><div class="opp-bar-labels"><span>55% funded</span><span>SLL 2.75M / 5M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 5M goal</div><div class="opp-meta">Harvest: Oct 2025</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Premium Lowland Rice','Amara Koroma · Bo District','🌾','Rice',18,5)">Invest</button></div></div>
+          </div>
+          <div class="opp-card" onclick="openModal('Palm Oil Plantation — New Plot','Moses Koroma · Pujehun','🫚','Palm Oil',24,12)">
+            <div class="opp-img" style="background:#f5ede8"><div class="opp-tag tag-new">✨ New</div><div class="opp-return">24% return</div>🫚</div>
+            <div class="opp-body"><div class="opp-crop">Palm Oil</div><div class="opp-name">Palm Oil Plantation — New Plot</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Moses Koroma · Pujehun</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:20%"></div></div><div class="opp-bar-labels"><span>20% funded</span><span>SLL 600k / 3M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 3M goal</div><div class="opp-meta">Harvest: Jun 2027</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Palm Oil Plantation','Moses Koroma · Pujehun','🫚','Palm Oil',24,12)">Invest</button></div></div>
+          </div>
+          <div class="opp-card" onclick="openModal('Cocoa Farm Expansion','Mariatu Sesay · Kailahun','☕','Cocoa',30,36)">
+            <div class="opp-img" style="background:#f0eadc"><div class="opp-tag tag-hot">⭐ Top rated</div><div class="opp-return">30% return</div>☕</div>
+            <div class="opp-body"><div class="opp-crop">Cocoa</div><div class="opp-name">Cocoa Farm Expansion — Kailahun</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Mariatu Sesay · Kailahun</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:80%"></div></div><div class="opp-bar-labels"><span>80% funded</span><span>SLL 4M / 5M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 5M goal</div><div class="opp-meta">Harvest: 2028</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Cocoa Farm Expansion','Mariatu Sesay · Kailahun','☕','Cocoa',30,36)">Invest</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BROWSE FARMS ═══ -->
+    <div class="panel" id="panel-browse">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Marketplace</div>
+          <div class="ph-title">Browse <em>Farms</em></div>
+          <div class="ph-sub">24 farms accepting investment right now.</div>
+        </div>
+        <div class="ph-actions">
+          <select class="lf-input" style="width:auto;padding:.5rem .9rem;font-size:.8rem">
+            <option>Sort: Highest return</option>
+            <option>Sort: Newest first</option>
+            <option>Sort: Closing soon</option>
+            <option>Sort: Most funded</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem">
+        <div class="mf-chip active" onclick="filterChip(this)">All crops</div>
+        <div class="mf-chip" onclick="filterChip(this)">Rice</div>
+        <div class="mf-chip" onclick="filterChip(this)">Cassava</div>
+        <div class="mf-chip" onclick="filterChip(this)">Groundnut</div>
+        <div class="mf-chip" onclick="filterChip(this)">Cocoa</div>
+        <div class="mf-chip" onclick="filterChip(this)">Palm Oil</div>
+        <div class="mf-chip" onclick="filterChip(this)">Verified farmers</div>
+        <div class="mf-chip" onclick="filterChip(this)">Short cycle (&lt;6mo)</div>
+        <div class="mf-chip" onclick="filterChip(this)">High return (&gt;20%)</div>
+      </div>
+
+      <div class="opp-grid">
+        <div class="opp-card" onclick="openModal('Premium Lowland Rice S3','Amara Koroma · Bo','🌾','Rice',18,5)"><div class="opp-img" style="background:#e8f5e0"><div class="opp-tag tag-hot">🔥 Hot</div><div class="opp-return">18%</div>🌾</div><div class="opp-body"><div class="opp-crop">Rice</div><div class="opp-name">Premium Lowland Rice S3</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Amara Koroma · Bo</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:55%"></div></div><div class="opp-bar-labels"><span>55%</span><span>SLL 2.75M/5M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 5M</div><div class="opp-meta">Harvest Oct 2025</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Premium Lowland Rice S3','Amara Koroma · Bo','🌾','Rice',18,5)">Invest</button></div></div></div>
+
+        <div class="opp-card" onclick="openModal('Palm Oil Plantation','Moses Koroma · Pujehun','🫚','Palm Oil',24,48)"><div class="opp-img" style="background:#f5ede8"><div class="opp-tag tag-new">✨ New</div><div class="opp-return">24%</div>🫚</div><div class="opp-body"><div class="opp-crop">Palm Oil</div><div class="opp-name">Palm Oil Plantation New Plot</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Moses Koroma · Pujehun</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:20%"></div></div><div class="opp-bar-labels"><span>20%</span><span>SLL 600k/3M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 3M</div><div class="opp-meta">Harvest Jun 2027</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Palm Oil Plantation','Moses Koroma · Pujehun','🫚','Palm Oil',24,48)">Invest</button></div></div></div>
+
+        <div class="opp-card" onclick="openModal('Cocoa Farm Expansion','Mariatu Sesay · Kailahun','☕','Cocoa',30,36)"><div class="opp-img" style="background:#f0eadc"><div class="opp-tag tag-hot">⭐ Top</div><div class="opp-return">30%</div>☕</div><div class="opp-body"><div class="opp-crop">Cocoa</div><div class="opp-name">Cocoa Farm Expansion Kailahun</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Mariatu Sesay · Kailahun</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:80%"></div></div><div class="opp-bar-labels"><span>80%</span><span>SLL 4M/5M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 5M</div><div class="opp-meta">Harvest 2028</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Cocoa Farm Expansion','Mariatu Sesay · Kailahun','☕','Cocoa',30,36)">Invest</button></div></div></div>
+
+        <div class="opp-card" onclick="openModal('Groundnut Harvest Batch B','Ibrahim Bangura · Moyamba','🥜','Groundnut',22,4)"><div class="opp-img" style="background:#fdf6e0"><div class="opp-return">22%</div>🥜</div><div class="opp-body"><div class="opp-crop">Groundnut</div><div class="opp-name">Groundnut Harvest Batch B</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Ibrahim Bangura · Moyamba</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:40%"></div></div><div class="opp-bar-labels"><span>40%</span><span>SLL 960k/2.4M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 2.4M</div><div class="opp-meta">Harvest Aug 2025</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Groundnut Harvest Batch B','Ibrahim Bangura · Moyamba','🥜','Groundnut',22,4)">Invest</button></div></div></div>
+
+        <div class="opp-card" onclick="openModal('Cassava Season 3','Hawa Conteh · Kenema','🌿','Cassava',20,9)"><div class="opp-img" style="background:#eaf2e3"><div class="opp-tag tag-new">New</div><div class="opp-return">20%</div>🌿</div><div class="opp-body"><div class="opp-crop">Cassava</div><div class="opp-name">Cassava Season 3 — Kenema</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Hawa Conteh · Kenema</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:10%"></div></div><div class="opp-bar-labels"><span>10%</span><span>SLL 300k/3M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 3M</div><div class="opp-meta">Harvest Feb 2026</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Cassava Season 3','Hawa Conteh · Kenema','🌿','Cassava',20,9)">Invest</button></div></div></div>
+
+        <div class="opp-card" onclick="openModal('Coffee Estate Expansion','Siaka Turay · Koinadugu','☕','Coffee',28,12)"><div class="opp-img" style="background:#ede8dc"><div class="opp-tag tag-hot">🔥 Premium</div><div class="opp-return">28%</div>☕</div><div class="opp-body"><div class="opp-crop">Coffee</div><div class="opp-name">Coffee Estate Expansion</div><div class="opp-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4 5-4 5 4 5 4"/></svg>Siaka Turay · Koinadugu</div><div class="opp-bar-wrap"><div class="opp-bar" style="width:65%"></div></div><div class="opp-bar-labels"><span>65%</span><span>SLL 3.25M/5M</span></div><div class="opp-footer"><div><div class="opp-goal">SLL 5M</div><div class="opp-meta">Harvest Jun 2026</div></div><button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openModal('Coffee Estate Expansion','Siaka Turay · Koinadugu','☕','Coffee',28,12)">Invest</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ MARKETPLACE ═══ -->
+    <div class="panel" id="panel-marketplace">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Farmer Market</div>
+          <div class="ph-title">Buy <em>From Farmers</em></div>
+          <div class="ph-sub">Order fresh produce, seeds and farm inputs directly from local farms.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Filter and sort are ready soon')">Sort: Freshest</button>
+        </div>
+      </div>
+      <div class="market-filters" style="margin-bottom:1.2rem;gap:.75rem;flex-wrap:wrap;">
+        <div class="mf-chip active" onclick="toggleChip(this)">All</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Rice</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Groundnut</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Cassava</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Vegetables</div>
+        <div class="mf-chip" onclick="toggleChip(this)">Seeds</div>
+      </div>
+      <div class="market-grid" style="grid-template-columns:repeat(3,1fr);gap:1rem;">
+        <div class="market-card"><div class="mc-img" style="background:#e8f5e0">🌾</div><div class="mc-body"><div class="mc-tag">Rice</div><div class="mc-name">Premium Lowland Rice — 50kg bag</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Sesay Farm, Kenema</div><div class="mc-footer"><div><div class="mc-price">SLL 180k</div><div class="mc-unit">per 50kg bag</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Premium Lowland Rice — 50kg bag','SLL 180k','Sesay Farm')">Buy</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#fdf3e0">🥜</div><div class="mc-body"><div class="mc-tag">Groundnut</div><div class="mc-name">Shelled Groundnut — 25kg sack</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Bangura Agro, Bo</div><div class="mc-footer"><div><div class="mc-price">SLL 95k</div><div class="mc-unit">per 25kg sack</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Shelled Groundnut — 25kg sack','SLL 95k','Bangura Agro')">Buy</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f0f8e8">🌿</div><div class="mc-body"><div class="mc-tag">Cassava</div><div class="mc-name">Fresh Cassava Stems — Bundle</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Koroma Family Farm</div><div class="mc-footer"><div><div class="mc-price">SLL 25k</div><div class="mc-unit">per bundle (50 stems)</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Fresh Cassava Stems — Bundle','SLL 25k','Koroma Family Farm')">Buy</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f5ede8">🌶️</div><div class="mc-body"><div class="mc-tag">Vegetables</div><div class="mc-name">Fresh Pepper — Crate</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>Conteh Gardens, Freetown</div><div class="mc-footer"><div><div class="mc-price">SLL 45k</div><div class="mc-unit">per crate (20kg)</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Fresh Pepper — Crate','SLL 45k','Conteh Gardens')">Buy</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#f0f4e0">🌱</div><div class="mc-body"><div class="mc-tag">Seeds</div><div class="mc-name">Improved Rice Seed — NERICA 4</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>AgroVest Inputs Store</div><div class="mc-footer"><div><div class="mc-price">SLL 60k</div><div class="mc-unit">per 5kg pack</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Improved Rice Seed — NERICA 4','SLL 60k','AgroVest Inputs Store')">Buy</button></div></div></div>
+        <div class="market-card"><div class="mc-img" style="background:#e8eef5">🪣</div><div class="mc-body"><div class="mc-tag">Inputs</div><div class="mc-name">Organic Fertiliser — 50kg bag</div><div class="mc-farmer"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="5" r="2.5"/><path d="M2 12s.5-4.5 5-4.5 5 4.5 5 4.5"/></svg>GreenGrow Supplies</div><div class="mc-footer"><div><div class="mc-price">SLL 130k</div><div class="mc-unit">per 50kg bag</div></div><button class="mc-btn" onclick="buyMarketplaceItem('Organic Fertiliser — 50kg bag','SLL 130k','GreenGrow Supplies')">Buy</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ PORTFOLIO ═══ -->
+    <div class="panel" id="panel-portfolio">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">My Investments</div>
+          <div class="ph-title">My <em>Portfolio</em></div>
+          <div class="ph-sub">7 active investments across 5 crop types.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="showToast('Portfolio report downloaded!')">Export Report</button>
+          <button class="btn btn-gold" onclick="switchPanel('browse')">+ New Investment</button>
+        </div>
+      </div>
+
+      <div class="stats-row" style="margin-bottom:1.2rem">
+        <div class="stat-card sc-gold"><div class="stat-icon" style="background:rgba(212,168,67,0.12)">💼</div><div class="stat-val">SLL 18.6M</div><div class="stat-label">Portfolio value</div></div>
+        <div class="stat-card sc-green"><div class="stat-icon" style="background:rgba(90,138,60,0.12)">📊</div><div class="stat-val">18.3%</div><div class="stat-label">Avg. return rate</div></div>
+        <div class="stat-card sc-sky"><div class="stat-icon" style="background:rgba(58,126,191,0.12)">🏆</div><div class="stat-val">SLL 3.4M</div><div class="stat-label">Earnings to date</div></div>
+        <div class="stat-card sc-rust"><div class="stat-icon" style="background:rgba(166,61,47,0.1)">⏳</div><div class="stat-val">SLL 2.1M</div><div class="stat-label">Pending payout</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><div class="card-title">All Investments</div><div style="display:flex;gap:.5rem"><span class="pill pill-green">7 active</span><span class="pill pill-soil">2 completed</span></div></div>
+        <table class="data-table">
+          <thead><tr><th>Crop / Farm</th><th>Farmer</th><th>Invested</th><th>Return %</th><th>Expected Payout</th><th>Harvest</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><span style="margin-right:.4rem">🌾</span><strong>Rice S3</strong> — Koroma Farm</td><td>Amara Koroma</td><td>SLL 1.5M</td><td><span class="pill pill-green">18%</span></td><td style="font-weight:500;color:var(--moss)">SLL 1.77M</td><td>Oct 2025</td><td><span class="pill pill-sky">Growing</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Farm update viewed!')">Update</button></td></tr>
+            <tr><td><span style="margin-right:.4rem">🥜</span><strong>Groundnut A</strong> — Bangura</td><td>Ibrahim Bangura</td><td>SLL 800k</td><td><span class="pill pill-green">22%</span></td><td style="font-weight:500;color:var(--straw)">SLL 976k</td><td>Jun 2025</td><td><span class="pill pill-gold">Payout due</span></td><td><button class="btn btn-gold btn-sm" onclick="showToast('Payout of SLL 976k requested!')">Claim</button></td></tr>
+            <tr><td><span style="margin-right:.4rem">🌿</span><strong>Cassava S2</strong> — Sesay Farm</td><td>Mariatu Sesay</td><td>SLL 600k</td><td><span class="pill pill-green">20%</span></td><td style="font-weight:500;color:var(--moss)">SLL 720k</td><td>Sep 2025</td><td><span class="pill pill-sky">Growing</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Farm update viewed!')">Update</button></td></tr>
+            <tr><td><span style="margin-right:.4rem">☕</span><strong>Cocoa Expansion</strong> — Sesay</td><td>Mariatu Sesay</td><td>SLL 5M</td><td><span class="pill pill-green">30%</span></td><td style="font-weight:500;color:var(--moss)">SLL 6.5M</td><td>2028</td><td><span class="pill pill-sky">Growing</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Farm update viewed!')">Update</button></td></tr>
+            <tr><td><span style="margin-right:.4rem">🌾</span><strong>Rice S1</strong> — Koroma Farm</td><td>Amara Koroma</td><td>SLL 1.2M</td><td><span class="pill pill-soil">18%</span></td><td style="font-weight:500">SLL 1.416M</td><td>Apr 2025</td><td><span class="pill pill-rust">Completed</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Receipt downloaded!')">Receipt</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ RETURNS & PAYOUTS ═══ -->
+    <div class="panel" id="panel-returns">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Finance</div>
+          <div class="ph-title">Returns & <em>Payouts</em></div>
+          <div class="ph-sub">Track your earnings and upcoming harvest payouts.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-gold" onclick="showToast('Withdrawal to Orange Money submitted!')">Withdraw Earnings</button>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:1.2rem">
+        <div style="background:linear-gradient(135deg,var(--soil),#1a0e06);border-radius:14px;padding:1.5rem;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:-40px;right:-30px;width:160px;height:160px;border-radius:50%;background:rgba(212,168,67,0.08)"></div>
+          <div style="font-size:0.68rem;color:rgba(245,237,216,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem">Total earnings to date</div>
+          <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--straw);margin-bottom:.2rem">SLL 3,416,000</div>
+          <div style="font-size:0.78rem;color:rgba(245,237,216,0.5);margin-bottom:1.5rem">Across 9 completed harvest cycles</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div><div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--sprout)">18.3%</div><div style="font-size:.68rem;color:rgba(245,237,216,.38)">Avg return rate</div></div>
+            <div><div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--cream)">SLL 2.1M</div><div style="font-size:.68rem;color:rgba(245,237,216,.38)">Pending payout</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Payout Timeline</div></div>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot pending">📅</div>
+              <div class="tl-body">
+                <div class="tl-date">Due in 12 days — Jun 19, 2025</div>
+                <div class="tl-name">Groundnut Batch A — Bangura Farm</div>
+                <div class="tl-amount">+ SLL 976,000 (22% return on SLL 800k)</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot future">🌾</div>
+              <div class="tl-body">
+                <div class="tl-date">Oct 2025 — Estimated</div>
+                <div class="tl-name">Rice Season 3 — Koroma Farm</div>
+                <div class="tl-amount">+ SLL 1,770,000 (18% on SLL 1.5M)</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot future">🌿</div>
+              <div class="tl-body">
+                <div class="tl-date">Sep 2025 — Estimated</div>
+                <div class="tl-name">Cassava Season 2 — Sesay Farm</div>
+                <div class="tl-amount">+ SLL 720,000 (20% on SLL 600k)</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot done">✓</div>
+              <div class="tl-body">
+                <div class="tl-date">Apr 10, 2025 — Paid</div>
+                <div class="tl-name">Rice Season 1 — Koroma Farm</div>
+                <div class="tl-amount" style="color:var(--bark)">SLL 1,416,000 received</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Payout History</div></div>
+        <table class="data-table">
+          <thead><tr><th>Date</th><th>Farm / Crop</th><th>Invested</th><th>Return %</th><th>Profit</th><th>Total Received</th><th>Method</th></tr></thead>
+          <tbody>
+            <tr><td>Apr 10, 2025</td><td>🌾 Rice S1 — Koroma Farm</td><td>SLL 1.2M</td><td><span class="pill pill-green">18%</span></td><td style="color:var(--moss);font-weight:500">+SLL 216k</td><td style="font-weight:500">SLL 1,416,000</td><td>Orange Money</td></tr>
+            <tr><td>Feb 2, 2025</td><td>🥜 Groundnut S1 — Bangura</td><td>SLL 500k</td><td><span class="pill pill-green">22%</span></td><td style="color:var(--moss);font-weight:500">+SLL 110k</td><td style="font-weight:500">SLL 610,000</td><td>Africell Money</td></tr>
+            <tr><td>Nov 20, 2024</td><td>🌿 Cassava S1 — Sesay</td><td>SLL 300k</td><td><span class="pill pill-green">20%</span></td><td style="color:var(--moss);font-weight:500">+SLL 60k</td><td style="font-weight:500">SLL 360,000</td><td>Bank Transfer</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ WATCHLIST ═══ -->
+    <div class="panel" id="panel-watchlist">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Saved Farms</div>
+          <div class="ph-title">My <em>Watchlist</em></div>
+          <div class="ph-sub">Farms you're keeping an eye on before investing.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-outline" onclick="switchPanel('browse')">Browse more farms</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="watchlist-item">
+          <div class="wl-emoji">🫚</div>
+          <div class="wl-info"><div class="wl-name">Palm Oil Plantation — Moses Koroma</div><div class="wl-farmer">Pujehun · 0.9 ha · 20% funded</div></div>
+          <div class="wl-right"><div class="wl-return">24% return</div><div class="wl-days">Harvest Jun 2027</div></div>
+          <button class="wl-btn" onclick="openModal('Palm Oil Plantation','Moses Koroma · Pujehun','🫚','Palm Oil',24,48)">Invest</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Removed from watchlist')">✕</button>
+        </div>
+        <div class="watchlist-item">
+          <div class="wl-emoji">☕</div>
+          <div class="wl-info"><div class="wl-name">Coffee Estate Expansion — Siaka Turay</div><div class="wl-farmer">Koinadugu · 65% funded</div></div>
+          <div class="wl-right"><div class="wl-return">28% return</div><div class="wl-days">Harvest Jun 2026</div></div>
+          <button class="wl-btn" onclick="openModal('Coffee Estate Expansion','Siaka Turay · Koinadugu','☕','Coffee',28,12)">Invest</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Removed from watchlist')">✕</button>
+        </div>
+        <div class="watchlist-item">
+          <div class="wl-emoji">🌽</div>
+          <div class="wl-info"><div class="wl-name">Maize Harvest — Conteh Farm</div><div class="wl-farmer">Tonkolili · 5% funded</div></div>
+          <div class="wl-right"><div class="wl-return">16% return</div><div class="wl-days">Harvest Sep 2025</div></div>
+          <button class="wl-btn" onclick="openModal('Maize Harvest','Conteh Farm · Tonkolili','🌽','Maize',16,3)">Invest</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Removed from watchlist')">✕</button>
+        </div>
+        <div class="watchlist-item">
+          <div class="wl-emoji">🥬</div>
+          <div class="wl-info"><div class="wl-name">Vegetable Greenhouse — Kamara Farm</div><div class="wl-farmer">Western Area · 30% funded</div></div>
+          <div class="wl-right"><div class="wl-return">15% return</div><div class="wl-days">Harvest Aug 2025</div></div>
+          <button class="wl-btn" onclick="openModal('Vegetable Greenhouse','Kamara Farm · Western Area','🥬','Vegetables',15,2)">Invest</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Removed from watchlist')">✕</button>
+        </div>
+        <div class="watchlist-item">
+          <div class="wl-emoji">🥜</div>
+          <div class="wl-info"><div class="wl-name">Groundnut Batch B — Ibrahim Bangura</div><div class="wl-farmer">Moyamba · 40% funded</div></div>
+          <div class="wl-right"><div class="wl-return">22% return</div><div class="wl-days">Harvest Aug 2025</div></div>
+          <button class="wl-btn" onclick="openModal('Groundnut Batch B','Ibrahim Bangura · Moyamba','🥜','Groundnut',22,4)">Invest</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Removed from watchlist')">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MARKET INSIGHTS ═══ -->
+    <div class="panel" id="panel-market">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Intelligence</div>
+          <div class="ph-title">Market <em>Insights</em></div>
+          <div class="ph-sub">Crop prices, seasonal trends, and investment data — updated daily.</div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:1.2rem">
+        <div class="insight-card"><div class="ic-icon">📈</div><div class="ic-tag">Trending Up</div><div class="ic-title">Rice prices up 4.7% this week in Bo and Kenema markets</div><div class="ic-meta">Jun 7, 2025 · 3 min read</div></div>
+        <div class="insight-card"><div class="ic-icon">🌧️</div><div class="ic-tag">Weather Alert</div><div class="ic-title">Heavy rains forecast for Southern Province — ideal for cassava growth</div><div class="ic-meta">Jun 6, 2025 · 2 min read</div></div>
+        <div class="insight-card"><div class="ic-icon">🏆</div><div class="ic-tag">Best Returns</div><div class="ic-title">Cocoa and coffee listings have averaged 29% ROI over last 3 seasons</div><div class="ic-meta">Jun 5, 2025 · 4 min read</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="card-hd"><div class="card-title">Crop Price Index — Sierra Leone</div><div style="font-size:.72rem;color:var(--bark)">Updated Jun 7, 2025</div></div>
+        <table class="data-table">
+          <thead><tr><th>Crop</th><th>Unit</th><th>Current Price</th><th>Last Week</th><th>Change</th><th>Investment Outlook</th></tr></thead>
+          <tbody>
+            <tr><td>🌾 Rice (local)</td><td>50kg bag</td><td style="font-weight:500">SLL 180,000</td><td>SLL 172,000</td><td><span class="up" style="font-size:.78rem;font-weight:500">▲ +4.7%</span></td><td><span class="pill pill-green">Strong Buy</span></td></tr>
+            <tr><td>🥜 Groundnut</td><td>25kg sack</td><td style="font-weight:500">SLL 95,000</td><td>SLL 98,000</td><td><span class="down" style="font-size:.78rem;font-weight:500">▼ −3.1%</span></td><td><span class="pill pill-gold">Hold</span></td></tr>
+            <tr><td>🌿 Cassava</td><td>100kg bag</td><td style="font-weight:500">SLL 65,000</td><td>SLL 62,000</td><td><span class="up" style="font-size:.78rem;font-weight:500">▲ +4.8%</span></td><td><span class="pill pill-green">Buy</span></td></tr>
+            <tr><td>☕ Cocoa</td><td>25kg bag</td><td style="font-weight:500">SLL 430,000</td><td>SLL 415,000</td><td><span class="up" style="font-size:.78rem;font-weight:500">▲ +3.6%</span></td><td><span class="pill pill-green">Strong Buy</span></td></tr>
+            <tr><td>🫚 Palm Oil</td><td>25L container</td><td style="font-weight:500">SLL 210,000</td><td>SLL 198,000</td><td><span class="up" style="font-size:.78rem;font-weight:500">▲ +6.1%</span></td><td><span class="pill pill-green">Buy</span></td></tr>
+            <tr><td>☕ Coffee</td><td>25kg bag</td><td style="font-weight:500">SLL 430,000</td><td>SLL 415,000</td><td><span class="up" style="font-size:.78rem;font-weight:500">▲ +3.6%</span></td><td><span class="pill pill-green">Strong Buy</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ FARMERS ═══ -->
+    <div class="panel" id="panel-farmers">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Community</div>
+          <div class="ph-title">Verified <em>Farmers</em></div>
+          <div class="ph-sub">Browse farmers you've invested with or can invest in.</div>
+        </div>
+      </div>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>Farmer</th><th>Location</th><th>Primary Crop</th><th>Farm Size</th><th>Success Rate</th><th>Avg. Return</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div style="width:30px;height:30px;border-radius:6px;background:rgba(90,138,60,0.12);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.75rem;font-weight:700;color:var(--moss)">AK</div>Amara Koroma</div></td><td>Bo District</td><td>🌾 Rice</td><td>4.2 ha</td><td><span class="up">94%</span></td><td><span class="pill pill-green">18%</span></td><td><span class="pill pill-green">Accepting</span></td><td><button class="btn btn-gold btn-sm" onclick="openModal('Rice Season 3','Amara Koroma · Bo','🌾','Rice',18,5)">Invest</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div style="width:30px;height:30px;border-radius:6px;background:rgba(212,168,67,0.12);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.75rem;font-weight:700;color:var(--gold)">IB</div>Ibrahim Bangura</div></td><td>Moyamba</td><td>🥜 Groundnut</td><td>2.8 ha</td><td><span class="up">91%</span></td><td><span class="pill pill-green">22%</span></td><td><span class="pill pill-green">Accepting</span></td><td><button class="btn btn-gold btn-sm" onclick="openModal('Groundnut Batch B','Ibrahim Bangura · Moyamba','🥜','Groundnut',22,4)">Invest</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div style="width:30px;height:30px;border-radius:6px;background:rgba(58,126,191,0.12);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.75rem;font-weight:700;color:var(--sky)">MS</div>Mariatu Sesay</div></td><td>Kailahun</td><td>☕ Cocoa</td><td>6.0 ha</td><td><span class="up">97%</span></td><td><span class="pill pill-green">30%</span></td><td><span class="pill pill-gold">Limited slots</span></td><td><button class="btn btn-gold btn-sm" onclick="openModal('Cocoa Expansion','Mariatu Sesay · Kailahun','☕','Cocoa',30,36)">Invest</button></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:.6rem"><div style="width:30px;height:30px;border-radius:6px;background:rgba(166,61,47,0.1);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.75rem;font-weight:700;color:var(--rust)">HC</div>Hawa Conteh</div></td><td>Kenema</td><td>🌿 Cassava</td><td>1.5 ha</td><td><span class="up">88%</span></td><td><span class="pill pill-green">20%</span></td><td><span class="pill pill-green">Accepting</span></td><td><button class="btn btn-gold btn-sm" onclick="openModal('Cassava Season 3','Hawa Conteh · Kenema','🌿','Cassava',20,9)">Invest</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ TRANSACTIONS ═══ -->
+    <div class="panel" id="panel-transactions">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Finance</div>
+          <div class="ph-title">Transaction <em>History</em></div>
+        </div>
+        <div class="ph-actions"><button class="btn btn-outline" onclick="showToast('Statement downloaded!')">Download Statement</button></div>
+      </div>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Jun 7, 2025</td><td>Wallet top-up via Orange Money</td><td><span class="pill pill-sky">Top-up</span></td><td style="color:var(--moss);font-weight:500">+SLL 2M</td><td>SLL 4.2M</td><td><span class="pill pill-green">Cleared</span></td></tr>
+            <tr><td>Jun 3, 2025</td><td>Investment — Cassava S2 · Sesay Farm</td><td><span class="pill pill-gold">Invested</span></td><td style="color:var(--rust);font-weight:500">−SLL 600k</td><td>SLL 2.2M</td><td><span class="pill pill-green">Confirmed</span></td></tr>
+            <tr><td>Apr 10, 2025</td><td>Payout — Rice S1 · Koroma Farm</td><td><span class="pill pill-green">Payout</span></td><td style="color:var(--moss);font-weight:500">+SLL 1.416M</td><td>SLL 2.8M</td><td><span class="pill pill-green">Received</span></td></tr>
+            <tr><td>Mar 1, 2025</td><td>Investment — Rice S3 · Koroma Farm</td><td><span class="pill pill-gold">Invested</span></td><td style="color:var(--rust);font-weight:500">−SLL 1.5M</td><td>SLL 1.384M</td><td><span class="pill pill-green">Confirmed</span></td></tr>
+            <tr><td>Feb 2, 2025</td><td>Payout — Groundnut S1 · Bangura Farm</td><td><span class="pill pill-green">Payout</span></td><td style="color:var(--moss);font-weight:500">+SLL 610k</td><td>SLL 2.884M</td><td><span class="pill pill-green">Received</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE ═══ -->
+    <div class="panel" id="panel-profile">
+      <div class="ph">
+        <div>
+          <div class="ph-eyebrow">Account</div>
+          <div class="ph-title">My <em>Profile</em></div>
+        </div>
+        <div class="ph-actions"><button class="btn btn-gold" onclick="showToast('Profile saved!')">Save Changes</button></div>
+      </div>
+      <div class="profile-wrap">
+        <div>
+          <div class="profile-sidebar-card">
+            <div class="pa">FB</div>
+            <div class="p-name">Fatmata Bangura</div>
+            <div class="p-role">📈 Verified Investor</div>
+            <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:.78rem" onclick="showToast('Upload photo!')">Change Photo</button>
+            <div class="p-divider"></div>
+            <div class="p-stat"><span>Member since</span><strong>Mar 2024</strong></div>
+            <div class="p-stat"><span>Total invested</span><strong>SLL 18.6M</strong></div>
+            <div class="p-stat"><span>Total returned</span><strong>SLL 3.4M</strong></div>
+            <div class="p-stat"><span>Active farms</span><strong>7</strong></div>
+            <div class="p-stat"><span>KYC status</span><strong style="color:var(--straw)">Pending ⚠</strong></div>
+            <div class="p-divider"></div>
+            <div style="font-size:.72rem;color:var(--bark);margin-bottom:.5rem;font-weight:500">Risk appetite</div>
+            <div class="risk-bar-wrap">
+              <div class="risk-seg filled"></div>
+              <div class="risk-seg filled"></div>
+              <div class="risk-seg filled"></div>
+              <div class="risk-seg"></div>
+              <div class="risk-seg"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--bark);margin-top:.3rem"><span>Conservative</span><span>Aggressive</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:1rem">Personal Information</div>
+            <div class="lf-row">
+              <div class="lf-group"><label class="lf-label">First name</label><input class="lf-input" value="Fatmata"></div>
+              <div class="lf-group"><label class="lf-label">Last name</label><input class="lf-input" value="Bangura"></div>
+            </div>
+            <div class="lf-group"><label class="lf-label">Email</label><input class="lf-input" type="email" value="fatmata.bangura@example.com"></div>
+            <div class="lf-row">
+              <div class="lf-group"><label class="lf-label">Phone</label><input class="lf-input" value="+232 76 999 000"></div>
+              <div class="lf-group"><label class="lf-label">Occupation</label><input class="lf-input" value="Business Owner"></div>
+            </div>
+            <div class="lf-row">
+              <div class="lf-group"><label class="lf-label">District</label><input class="lf-input" value="Western Area"></div>
+              <div class="lf-group"><label class="lf-label">Investment budget range</label>
+                <select class="lf-input" style="appearance:none">
+                  <option>SLL 2M – 10M</option>
+                  <option>SLL 10M – 50M</option>
+                  <option>SLL 50M+</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-title" style="margin:1rem 0 .8rem">Payment & Payout Settings</div>
+            <div class="lf-row">
+              <div class="lf-group"><label class="lf-label">Primary payout method</label><input class="lf-input" value="Orange Money — 076-999-000"></div>
+              <div class="lf-group"><label class="lf-label">Secondary method</label><input class="lf-input" value="GTBank SL — Acc. ****4421"></div>
+            </div>
+            <div class="lf-group"><label class="lf-label">Investment preferences</label>
+              <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem">
+                <span class="mf-chip active">Short cycle crops</span>
+                <span class="mf-chip active">High return (&gt;20%)</span>
+                <span class="mf-chip active">Verified farmers only</span>
+                <span class="mf-chip">Organic farms</span>
+                <span class="mf-chip">Bo District</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<style>
+.mf-chip{padding:.4rem 1rem;border-radius:100px;font-size:.76rem;font-weight:400;cursor:pointer;border:1px solid rgba(90,138,60,0.2);background:var(--white);color:var(--bark);transition:all .2s;display:inline-flex;align-items:center}
+.mf-chip.active,.mf-chip:hover{background:var(--moss);color:var(--cream);border-color:var(--moss)}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.lf-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.8rem}
+.lf-label{font-size:.72rem;font-weight:500;color:var(--bark)}
+.lf-input{width:100%;padding:.65rem .9rem;border-radius:8px;border:1px solid rgba(90,138,60,0.2);background:var(--white);font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--soil);outline:none;transition:all .2s}
+.lf-input:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(59,94,43,.08);background:var(--mist)}
+.page-back{display:flex;justify-content:flex-start}
+.page-back .btn{padding:.55rem .95rem}
+.market-card{background:var(--white);border:1px solid rgba(212,168,67,0.12);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:all .25s;cursor:default}
+.market-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(44,26,14,0.08)}
+.mc-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:2.3rem}
+.mc-body{padding:1rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
+.mc-tag{font-size:.7rem;font-weight:500;color:var(--leaf);text-transform:uppercase;letter-spacing:.7px}
+.mc-name{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--soil);line-height:1.2}
+.mc-farmer{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--bark)}
+.mc-footer{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.mc-price{font-weight:700;color:var(--soil)}
+.mc-unit{font-size:.72rem;color:var(--bark)}
+.mc-btn{padding:.55rem .95rem;border:none;border-radius:10px;background:var(--straw);color:var(--soil);font-weight:600;cursor:pointer;transition:all .2s}
+.mc-btn:hover{background:#e8c460;transform:translateY(-1px)}
+</style>
+
+<script>
+// ── NAV ──
+function switchPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const ni=document.getElementById('nav-'+id);
+  if(ni) ni.classList.add('active');
+  const backBtn=document.getElementById('page-back');
+  backBtn.style.display = id==='overview' ? 'none' : 'flex';
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ── MODAL ──
+let modalReturn=18;
+function openModal(farmName,farmerSub,emoji,crop,returnPct,months){
+  modalReturn=returnPct;
+  document.getElementById('modal-farm-name').textContent='Invest in '+farmName;
+  document.getElementById('modal-farm-sub').textContent='Choose how much to invest in this farm.';
+  document.getElementById('modal-emoji').textContent=emoji;
+  document.getElementById('modal-crop-name').textContent=crop+' — '+farmName;
+  document.getElementById('modal-farmer-name').textContent=farmerSub;
+  document.getElementById('modal-return-pill').textContent=returnPct+'% return';
+  document.getElementById('modal-duration-pill').textContent=months+(months>=12?' months':' months');
+  document.getElementById('invest-amount').value='';
+  document.getElementById('returns-preview').style.display='none';
+  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('invest-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('invest-modal').classList.remove('open')}
+document.getElementById('invest-modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+
+function selectAmount(val,btn){
+  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(val>0){
+    document.getElementById('invest-amount').value=val;
+    calcReturns();
+  } else {
+    document.getElementById('invest-amount').value='';
+    document.getElementById('returns-preview').style.display='none';
+  }
+}
+
+function calcReturns(){
+  const amt=parseFloat(document.getElementById('invest-amount').value)||0;
+  if(amt<=0){document.getElementById('returns-preview').style.display='none';return;}
+  const profit=amt*(modalReturn/100);
+  const total=amt+profit;
+  const fmt=n=>'SLL '+n.toLocaleString('en-SL');
+  document.getElementById('rp-invested').textContent=fmt(amt);
+  document.getElementById('rp-rate').textContent=modalReturn+'%';
+  document.getElementById('rp-profit').textContent='+'+fmt(profit);
+  document.getElementById('rp-total').textContent=fmt(total);
+  document.getElementById('returns-preview').style.display='block';
+}
+
+function confirmInvest(){
+  const amt=parseFloat(document.getElementById('invest-amount').value)||0;
+  if(amt<=0){showToast('Please enter an investment amount.');return;}
+  closeModal();
+  showToast('Investment of SLL '+amt.toLocaleString()+' confirmed! 🎉');
+}
+
+function logout(){
+  showToast('Logging out...');
+  setTimeout(()=>window.location.href='log_in.html',400);
+}
+
+function buyMarketplaceItem(name,price,farmer){
+  showToast('Order placed: '+name+' from '+farmer);
+}
+
+// ── FILTERS ──
+function filterChip(el){
+  document.querySelectorAll('#panel-browse .mf-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleChip(el){
+  document.querySelectorAll('#panel-marketplace .mf-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
