@@ -189,7 +189,7 @@
     .lp-stats {
       display: flex; gap: 2rem; margin-top: 2.5rem;
       padding-top: 2rem;
-      border-top: 1px solid rgba(245,237,216,0.08);
+      /* border-top: 1px solid rgba(245,237,216,0.08); */
       animation: fadeUp 0.7s 0.25s ease both;
       position: relative; z-index: 1;
     }
