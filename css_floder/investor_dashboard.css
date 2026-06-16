@@ -244,6 +244,32 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .risk-seg{flex:1;height:6px;border-radius:3px;background:rgba(90,138,60,0.1)}
 .risk-seg.filled{background:var(--moss)}
 
+/* ── FORM HELPERS ── */
+.mf-chip{padding:.4rem 1rem;border-radius:100px;font-size:.76rem;font-weight:400;cursor:pointer;border:1px solid rgba(90,138,60,0.2);background:var(--white);color:var(--bark);transition:all .2s;display:inline-flex;align-items:center}
+.mf-chip.active,.mf-chip:hover{background:var(--moss);color:var(--cream);border-color:var(--moss)}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.lf-group{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.8rem}
+.lf-label{font-size:.72rem;font-weight:500;color:var(--bark)}
+.lf-input{width:100%;padding:.65rem .9rem;border-radius:8px;border:1px solid rgba(90,138,60,0.2);background:var(--white);font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--soil);outline:none;transition:all .2s}
+.lf-input:focus{border-color:var(--moss);box-shadow:0 0 0 3px rgba(59,94,43,.08);background:var(--mist)}
+.page-back{display:flex;justify-content:flex-start}
+.page-back .btn{padding:.55rem .95rem}
+
+/* ── MARKETPLACE CARDS ── */
+.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.market-card{background:var(--white);border:1px solid rgba(212,168,67,0.12);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:all .25s;cursor:default}
+.market-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(44,26,14,0.08)}
+.mc-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:2.3rem}
+.mc-body{padding:1rem;display:flex;flex-direction:column;gap:.75rem;flex:1}
+.mc-tag{font-size:.7rem;font-weight:500;color:var(--leaf);text-transform:uppercase;letter-spacing:.7px}
+.mc-name{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--soil);line-height:1.2}
+.mc-farmer{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--bark)}
+.mc-footer{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.mc-price{font-weight:700;color:var(--soil)}
+.mc-unit{font-size:.72rem;color:var(--bark)}
+.mc-btn{padding:.55rem .95rem;border:none;border-radius:10px;background:var(--straw);color:var(--soil);font-weight:600;cursor:pointer;transition:all .2s}
+.mc-btn:hover{background:#e8c460;transform:translateY(-1px)}
+
 /* ── KYC BANNER ── */
 .kyc-banner{background:linear-gradient(90deg,rgba(212,168,67,0.12),rgba(212,168,67,0.06));border:1px solid rgba(212,168,67,0.25);border-radius:12px;padding:0.85rem 1.1rem;display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem}
 .kyc-icon{font-size:1.2rem;flex-shrink:0}
