@@ -79,12 +79,14 @@
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      justify-content: space-between;
+      /* grid-template-rows: 1fr 1fr; */
       padding: 7rem 4rem 4rem;
       gap: 2rem;
-      position: relative;
+      /* position: relative; */
       overflow: hidden;
+      
     }
 
     .hero-bg {
@@ -201,16 +203,17 @@
     /* ── HERO RIGHT (visual) ── */
     .hero-right {
       position: relative; z-index: 1;
-      background-image: url("/images/bg_landing_page.jpg");
+      background-image: url("/AgroVest_project_bsem1203_group_project/images/bg_landing_page.jpg");
       background-repeat: no-repeat;
-      display: flex; align-items: center; justify-content: center;
+      /* display: flex; align-items: center; justify-content: center; */
       border-radius: 20px;
+      width: 50%;
     }
 
     .hero-card-stack {
       position: relative; width: 340px; height: 420px;
-      right: 100px;
-      bottom: 100px;
+      left: 20%;
+      top: 15%;
     }
 
     .card {
