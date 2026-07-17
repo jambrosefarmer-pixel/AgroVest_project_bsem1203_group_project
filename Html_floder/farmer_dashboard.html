@@ -80,6 +80,10 @@
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v1.2m0 5.6V12M6 9.5h2.5a1.5 1.5 0 000-3H7A1.5 1.5 0 015.5 5h3"/></svg>
       Funding
     </div>
+    <div class="nav-item" id="nav-osusu" onclick="switchPanel('osusu')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 5h10"/><path d="M4 8h8"/><path d="M5 11h6"/><path d="M8 2v12"/></svg>
+      Osusu
+    </div>
 
     <div class="sidebar-section">Market</div>
     <div class="nav-item" id="nav-marketplace" onclick="switchPanel('marketplace')">
@@ -264,6 +268,133 @@
             <tr><td><span style="margin-right:.4rem">🌿</span>Cassava</td><td>East Slope — 0.9 ha</td><td>Dec 2, 2024</td><td>Sep 2, 2025</td><td><span class="pill green">142 days</span></td><td><span class="pill green">Growing</span></td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ═══════════ OSUSU ═══════════ -->
+    <div class="panel" id="panel-osusu">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Community savings</div>
+          <div class="ph-title">Osusu <em>Piggy Bank</em></div>
+          <div class="ph-sub">Join daily, weekly, or monthly circles and rotate payouts fairly across participating farmers.</div>
+        </div>
+        <div class="ph-actions">
+          <button class="btn btn-primary" onclick="openOsusuJoinModal()">Join a circle</button>
+        </div>
+      </div>
+
+      <div class="osusu-hero">
+        <div>
+          <div class="ph-eyebrow" style="margin-bottom:.4rem">Today’s pooled savings</div>
+          <div class="osusu-hero-amount" id="osusu-total-pool">NLE 0</div>
+          <div class="osusu-hero-sub">Every contribution grows the pot and prepares the next payout to a farmer in the queue.</div>
+        </div>
+        <div class="osusu-hero-stats">
+          <div class="osusu-stat">
+            <div class="osusu-stat-val" id="osusu-member-count">0</div>
+            <div class="osusu-stat-label">Active members</div>
+          </div>
+          <div class="osusu-stat">
+            <div class="osusu-stat-val" id="osusu-next-payout">—</div>
+            <div class="osusu-stat-label">Next payout</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="osusu-dashboard">
+        <div class="osusu-dashboard-header">
+          <div>
+            <div class="ph-eyebrow" style="margin-bottom:.35rem">Choose circle type</div>
+            <div class="osusu-dashboard-title">Piggy bank status board</div>
+          </div>
+          <label class="osusu-type-select">
+            <span>Osusu type</span>
+            <select id="osusu-type-select">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="osusu-status-grid">
+          <div class="osusu-status-card">
+            <div class="osusu-status-card-head">
+              <div class="osusu-status-title">Deposited</div>
+              <span class="osusu-pill green" id="deposited-count">0</span>
+            </div>
+            <div id="deposited-list" class="osusu-member-list"></div>
+          </div>
+
+          <div class="osusu-status-card">
+            <div class="osusu-status-card-head">
+              <div class="osusu-status-title">Yet to deposit</div>
+              <span class="osusu-pill amber" id="pending-count">0</span>
+            </div>
+            <div id="pending-list" class="osusu-member-list"></div>
+          </div>
+
+          <div class="osusu-status-card">
+            <div class="osusu-status-card-head">
+              <div class="osusu-status-title">Paid</div>
+              <span class="osusu-pill rust" id="paid-count">0</span>
+            </div>
+            <div id="paid-list" class="osusu-member-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="osusu-join-panel">
+        <div class="osusu-join-head">
+          <div>
+            <div class="card-title">Join or manage your circle</div>
+            <div class="card-sub">Choose the circle type, make a deposit, or request a withdrawal.</div>
+          </div>
+          <button class="btn btn-primary" onclick="openOsusuJoinModal()">Join circle</button>
+        </div>
+        <div class="osusu-join-status" id="osusu-join-status">No circle joined yet.</div>
+        <div class="osusu-actions-row">
+          <label class="osusu-inline-field">
+            <span>Fixed contribution</span>
+            <input id="osusu-amount-input" type="text" value="NLE 40" readonly />
+          </label>
+          <button class="btn btn-primary" id="osusu-deposit-btn" onclick="handleOsusuDeposit()">Deposit</button>
+          <button class="btn btn-outline" id="osusu-withdraw-btn" onclick="handleOsusuWithdrawal()">Withdrawal</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1rem">
+        <div class="card-header"><div class="card-title">How Osusu works</div></div>
+        <div class="osusu-list">
+          <div class="osusu-list-item"><strong>Daily:</strong> contribute NLE 40 every day and rotate payouts at the end of the day.</div>
+          <div class="osusu-list-item"><strong>Weekly:</strong> contribute NLE 100 every week and rotate payouts at the end of the week.</div>
+          <div class="osusu-list-item"><strong>Monthly:</strong> contribute NLE 500 every month and rotate payouts at the end of the month.</div>
+          <div class="osusu-list-item"><strong>Flexible:</strong> a farmer can join all three circles at once and contribute to each plan separately.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="osusu-modal-backdrop" id="osusu-join-modal" style="display:none">
+      <div class="osusu-modal">
+        <div class="osusu-modal-title">Choose your Osusu circle</div>
+        <div class="osusu-modal-sub">Pick the circle type you want to join and set your contribution amount.</div>
+        <label class="osusu-inline-field" style="margin-top:1rem">
+          <span>Circle type</span>
+          <select id="join-osusu-type">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </label>
+        <label class="osusu-inline-field" style="margin-top:.8rem">
+          <span>Contribution amount</span>
+          <input id="join-osusu-amount" type="text" value="NLE 40" readonly />
+        </label>
+        <div class="osusu-modal-actions">
+          <button class="btn btn-outline" onclick="closeOsusuJoinModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="joinOsusuCircle()">Join circle</button>
+        </div>
       </div>
     </div>
 
@@ -933,9 +1064,285 @@ function renderReminders(){
   }).join('');
 }
 
+const osusuData = {
+  daily: {
+    poolValue: 2400,
+    pool: 'NLE 2,400',
+    members: ['Aminata S.', 'Musa J.', 'Kadiatu B.', 'Fatima K.'],
+    deposited: [
+      { name: 'Aminata S.', amount: 'NLE 40', note: 'Deposited today' },
+      { name: 'Musa J.', amount: 'NLE 40', note: 'Deposited today' },
+      { name: 'Fatima K.', amount: 'NLE 40', note: 'Deposited today' }
+    ],
+    pending: [
+      { name: 'Kadiatu B.', amount: 'NLE 40', note: 'Pending for today' }
+    ],
+    paid: [
+      { name: 'Foday K.', amount: 'NLE 240', note: 'Paid yesterday' }
+    ],
+    nextPayout: 'Tomorrow',
+    contributionAmount: 40
+  },
+  weekly: {
+    poolValue: 8400,
+    pool: 'NLE 8,400',
+    members: ['Ibrahim T.', 'Sia S.', 'Rashid M.', 'Hawa B.'],
+    deposited: [
+      { name: 'Ibrahim T.', amount: 'NLE 100', note: 'Deposited this week' },
+      { name: 'Sia S.', amount: 'NLE 100', note: 'Deposited this week' }
+    ],
+    pending: [
+      { name: 'Rashid M.', amount: 'NLE 100', note: 'Awaiting this week' },
+      { name: 'Hawa B.', amount: 'NLE 100', note: 'Awaiting this week' }
+    ],
+    paid: [
+      { name: 'Binta D.', amount: 'NLE 700', note: 'Paid last week' }
+    ],
+    nextPayout: 'Friday',
+    contributionAmount: 100
+  },
+  monthly: {
+    poolValue: 24000,
+    pool: 'NLE 24,000',
+    members: ['Amara K.', 'Bockarie F.', 'Mariama J.', 'Kenny T.'],
+    deposited: [
+      { name: 'Amara K.', amount: 'NLE 500', note: 'Deposited this month' },
+      { name: 'Bockarie F.', amount: 'NLE 500', note: 'Deposited this month' }
+    ],
+    pending: [
+      { name: 'Mariama J.', amount: 'NLE 500', note: 'Pending this month' },
+      { name: 'Kenny T.', amount: 'NLE 500', note: 'Pending this month' }
+    ],
+    paid: [
+      { name: 'Saidu M.', amount: 'NLE 3,000', note: 'Paid last month' }
+    ],
+    nextPayout: 'End of month',
+    contributionAmount: 500
+  }
+};
+
+const osusuUserState = {
+  daily: { joined: false, status: 'not-joined', balance: 0, withdrawn: false, memberNumber: '' },
+  weekly: { joined: false, status: 'not-joined', balance: 0, withdrawn: false, memberNumber: '' },
+  monthly: { joined: false, status: 'not-joined', balance: 0, withdrawn: false, memberNumber: '' }
+};
+
+const osusuMemberName = 'You';
+let osusuMemberCounter = 1001;
+
+function getOsusuContribution(type){
+  if(type === 'weekly') return 100;
+  if(type === 'monthly') return 500;
+  return 40;
+}
+
+function getOsusuTypeLabel(type){
+  return type === 'weekly' ? 'Weekly' : type === 'monthly' ? 'Monthly' : 'Daily';
+}
+
+function formatOsusuAmount(value){
+  return `NLE ${value.toLocaleString('en-US')}`;
+}
+
+function removeOsusuMember(items, name){
+  return items.filter(item => item.name !== name);
+}
+
+function syncOsusuJoinCard(){
+  const type = document.getElementById('osusu-type-select') ? document.getElementById('osusu-type-select').value : 'daily';
+  const state = osusuUserState[type] || osusuUserState.daily;
+  const statusEl = document.getElementById('osusu-join-status');
+  const depositBtn = document.getElementById('osusu-deposit-btn');
+  const withdrawBtn = document.getElementById('osusu-withdraw-btn');
+  const amountInput = document.getElementById('osusu-amount-input');
+  const joinSelect = document.getElementById('join-osusu-type');
+  const joinAmount = document.getElementById('join-osusu-amount');
+
+  if(statusEl){
+    if(state.joined){
+      const label = getOsusuTypeLabel(type);
+      const fixedAmount = getOsusuContribution(type);
+      const statusText = state.withdrawn ? 'Withdrawn once' : state.status === 'deposited' ? 'Deposited' : state.status === 'paid' ? 'Withdrawn' : 'Pending';
+      statusEl.innerHTML = `<strong>${label}</strong> circle joined. Member ID: <strong>${state.memberNumber || '—'}</strong> · Fixed contribution: <strong>${formatOsusuAmount(fixedAmount)}</strong> · Balance: <strong>${formatOsusuAmount(state.balance)}</strong> · Status: <strong>${statusText}</strong>`;
+    } else {
+      statusEl.textContent = 'No circle joined yet.';
+    }
+  }
+
+  if(depositBtn) depositBtn.disabled = !state.joined;
+  if(withdrawBtn) withdrawBtn.disabled = !state.joined || state.balance <= 0 || state.withdrawn;
+  if(amountInput){
+    const defaultAmount = getOsusuContribution(type);
+    amountInput.value = `NLE ${defaultAmount}`;
+    amountInput.readOnly = true;
+  }
+  if(joinSelect) joinSelect.value = type;
+  if(joinAmount){
+    const defaultJoinAmount = getOsusuContribution(type);
+    joinAmount.value = `NLE ${defaultJoinAmount}`;
+    joinAmount.readOnly = true;
+  }
+}
+
+function openOsusuJoinModal(){
+  const modal = document.getElementById('osusu-join-modal');
+  const joinSelect = document.getElementById('join-osusu-type');
+  const joinAmount = document.getElementById('join-osusu-amount');
+  const activeType = document.getElementById('osusu-type-select') ? document.getElementById('osusu-type-select').value : 'daily';
+  if(joinSelect) joinSelect.value = activeType;
+  if(joinAmount){
+    const amount = getOsusuContribution(activeType);
+    joinAmount.value = `NLE ${amount}`;
+  }
+  if(modal) modal.style.display = 'flex';
+}
+
+function closeOsusuJoinModal(){
+  const modal = document.getElementById('osusu-join-modal');
+  if(modal) modal.style.display = 'none';
+}
+
+function joinOsusuCircle(){
+  const type = document.getElementById('join-osusu-type') ? document.getElementById('join-osusu-type').value : 'daily';
+  const amount = getOsusuContribution(type);
+  const data = osusuData[type] || osusuData.daily;
+
+  const state = osusuUserState[type] || osusuUserState.daily;
+  state.joined = true;
+  state.status = 'pending';
+  state.balance = 0;
+  state.withdrawn = false;
+  state.memberNumber = `OSU-${osusuMemberCounter++}`;
+  data.contributionAmount = amount;
+
+  data.pending = removeOsusuMember(data.pending, osusuMemberName);
+  data.deposited = removeOsusuMember(data.deposited, osusuMemberName);
+  data.paid = removeOsusuMember(data.paid, osusuMemberName);
+  data.pending.push({ name: osusuMemberName, amount: formatOsusuAmount(amount), note: 'Joined the circle' });
+  if(!data.members.includes(osusuMemberName)) data.members.push(osusuMemberName);
+
+  if(document.getElementById('osusu-type-select')) document.getElementById('osusu-type-select').value = type;
+  renderOsusuDashboard();
+  syncOsusuJoinCard();
+  closeOsusuJoinModal();
+  showToast(`Joined the ${getOsusuTypeLabel(type)} circle.`);
+}
+
+function handleOsusuDeposit(){
+  const select = document.getElementById('osusu-type-select');
+  const type = select ? select.value : 'daily';
+  const data = osusuData[type] || osusuData.daily;
+  const state = osusuUserState[type] || osusuUserState.daily;
+  const amount = getOsusuContribution(type);
+
+  if(!state.joined){
+    showToast('Join a circle first.');
+    return;
+  }
+
+  data.pending = removeOsusuMember(data.pending, osusuMemberName);
+  data.deposited = removeOsusuMember(data.deposited, osusuMemberName);
+  data.paid = removeOsusuMember(data.paid, osusuMemberName);
+  data.deposited.push({ name: osusuMemberName, amount: formatOsusuAmount(amount), note: 'Deposited today' });
+  state.balance += amount;
+  state.status = 'deposited';
+  data.poolValue += amount;
+  data.pool = formatOsusuAmount(data.poolValue);
+
+  renderOsusuDashboard();
+  syncOsusuJoinCard();
+  showToast(`Deposit of ${formatOsusuAmount(amount)} saved.`);
+}
+
+function handleOsusuWithdrawal(){
+  const select = document.getElementById('osusu-type-select');
+  const type = select ? select.value : 'daily';
+  const data = osusuData[type] || osusuData.daily;
+  const state = osusuUserState[type] || osusuUserState.daily;
+
+  if(!state.joined){
+    showToast('Join a circle first.');
+    return;
+  }
+  if(state.withdrawn){
+    showToast('You have already withdrawn once from this circle.');
+    return;
+  }
+  if(state.balance <= 0){
+    showToast('You do not have enough balance to withdraw.');
+    return;
+  }
+
+  const amount = state.balance;
+  data.pending = removeOsusuMember(data.pending, osusuMemberName);
+  data.deposited = removeOsusuMember(data.deposited, osusuMemberName);
+  data.paid = removeOsusuMember(data.paid, osusuMemberName);
+  data.paid.push({ name: osusuMemberName, amount: formatOsusuAmount(amount), note: 'Withdrew once' });
+  state.balance = 0;
+  state.status = 'paid';
+  state.withdrawn = true;
+  data.poolValue = Math.max(0, data.poolValue - amount);
+  data.pool = formatOsusuAmount(data.poolValue);
+
+  renderOsusuDashboard();
+  syncOsusuJoinCard();
+  showToast(`Withdrawal of ${formatOsusuAmount(amount)} processed.`);
+}
+
+function renderOsusuDashboard(){
+  const select=document.getElementById('osusu-type-select');
+  const type=select ? select.value : 'daily';
+  const data=osusuData[type]||osusuData.daily;
+
+  const totalPool=document.getElementById('osusu-total-pool');
+  const memberCount=document.getElementById('osusu-member-count');
+  const nextPayout=document.getElementById('osusu-next-payout');
+
+  if(totalPool) totalPool.textContent=data.pool;
+  if(memberCount) memberCount.textContent=data.members.length;
+  if(nextPayout) nextPayout.textContent=data.nextPayout;
+
+  const renderList=(containerId, items)=>{
+    const container=document.getElementById(containerId);
+    if(!container) return;
+    if(!items.length){
+      container.innerHTML='<div class="empty-state">No members yet.</div>';
+      return;
+    }
+    container.innerHTML=items.map(item=>`
+      <div class="osusu-member-item">
+        <div>
+          <div class="osusu-member-name">${item.name}</div>
+          <div class="osusu-member-meta">${item.note}</div>
+        </div>
+        <div class="osusu-member-meta" style="font-weight:600;color:var(--moss)">${item.amount}</div>
+      </div>
+    `).join('');
+  };
+
+  renderList('deposited-list', data.deposited);
+  renderList('pending-list', data.pending);
+  renderList('paid-list', data.paid);
+
+  const depositedCount=document.getElementById('deposited-count');
+  const pendingCount=document.getElementById('pending-count');
+  const paidCount=document.getElementById('paid-count');
+  if(depositedCount) depositedCount.textContent=data.deposited.length;
+  if(pendingCount) pendingCount.textContent=data.pending.length;
+  if(paidCount) paidCount.textContent=data.paid.length;
+}
+
 // init
 renderCalendar();
 renderReminders();
+renderOsusuDashboard();
+syncOsusuJoinCard();
+if(document.getElementById('osusu-type-select')){
+  document.getElementById('osusu-type-select').addEventListener('change', () => {
+    renderOsusuDashboard();
+    syncOsusuJoinCard();
+  });
+}
 // set today's date as default in date picker
 document.getElementById('arc-date').value=new Date().toISOString().split('T')[0];
 </script>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroVest — Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css_floder/market.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="market-header">
+      <div class="brand-block">
+        <div class="brand-logo">Agro<span>Vest</span></div>
+        <p>Buy fresh produce from verified farms in a simple, trusted marketplace.</p>
+      </div>
+
+      <div class="header-tools">
+        <label class="search-wrap">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+          <input id="searchInput" type="text" placeholder="Search products or farms" />
+        </label>
+
+        <div class="cart-pill">🛒 <span id="cart-count">0</span> items</div>
+        <a class="ghost-link" href="index.html">Back Home</a>
+      </div>
+    </header>
+
+    <main class="market-layout">
+      <section class="products-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">General Marketplace</p>
+            <h1>Fresh farm produce for homes, stores, and local buyers</h1>
+          </div>
+          <div class="chip-row">
+            <span class="chip active">All produce</span>
+            <span class="chip">Grains</span>
+            <span class="chip">Veggies</span>
+            <span class="chip">Herbs</span>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <article class="product-card active" data-name="Premium Rice" data-price="7800" data-farm="Koroma Family Farm" data-category="Grains" data-emoji="🌾">
+            <div class="product-emoji">🌾</div>
+            <div class="product-name">Premium Rice</div>
+            <div class="product-meta">50kg bag · Fresh stock</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 7,800</div>
+                <div class="price-label">per bag</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-name="Garden Tomatoes" data-price="3200" data-farm="Mabinty Farm Co." data-category="Veggies" data-emoji="🍅">
+            <div class="product-emoji">🍅</div>
+            <div class="product-name">Garden Tomatoes</div>
+            <div class="product-meta">20kg crate · Ready now</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 3,200</div>
+                <div class="price-label">per crate</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-name="Cassava Flour" data-price="5400" data-farm="Wurie Agro Supply" data-category="Grains" data-emoji="🥔">
+            <div class="product-emoji">🥔</div>
+            <div class="product-name">Cassava Flour</div>
+            <div class="product-meta">25kg sack · Clean and packaged</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 5,400</div>
+                <div class="price-label">per sack</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-name="Fresh Pepper" data-price="2800" data-farm="Bo Valley Farms" data-category="Veggies" data-emoji="🌶️">
+            <div class="product-emoji">🌶️</div>
+            <div class="product-name">Fresh Pepper</div>
+            <div class="product-meta">15kg basket · Daily harvest</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 2,800</div>
+                <div class="price-label">per basket</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-name="Cocoa Beans" data-price="11250" data-farm="Kono Highlands" data-category="Herbs" data-emoji="🍫">
+            <div class="product-emoji">🍫</div>
+            <div class="product-name">Cocoa Beans</div>
+            <div class="product-meta">60kg sack · Premium grade</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 11,250</div>
+                <div class="price-label">per sack</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-name="Palm Oil" data-price="9600" data-farm="Mende Harvest Hub" data-category="Herbs" data-emoji="🫒">
+            <div class="product-emoji">🫒</div>
+            <div class="product-name">Palm Oil</div>
+            <div class="product-meta">20L gallon · Export quality</div>
+            <div class="product-footer">
+              <div>
+                <div class="price">SLL 9,600</div>
+                <div class="price-label">per gallon</div>
+              </div>
+              <button type="button" class="select-btn">View details</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <div class="detail-card">
+          <p class="eyebrow">Selected Product</p>
+          <h2 id="detailTitle">Premium Rice</h2>
+          <p id="detailDesc">Bulk buying is available for households and small retailers.</p>
+
+          <div class="detail-meta">
+            <div>
+              <span class="meta-label">Price</span>
+              <div id="detailPrice" class="meta-value">SLL 7,800</div>
+            </div>
+            <div>
+              <span class="meta-label">Farm</span>
+              <div id="detailFarm" class="meta-value">Koroma Family Farm</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label">Purchase type</label>
+            <div class="choice-row">
+              <label class="choice-pill active">
+                <input type="radio" name="saleType" value="Retail" checked />
+                Retail
+              </label>
+              <label class="choice-pill">
+                <input type="radio" name="saleType" value="Wholesale" />
+                Wholesale
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label" for="quantitySelect">Quantity</label>
+            <select id="quantitySelect">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+                <option value="60">60</option>   
+              <option value="70">70</option>
+              <option value="80">80</option>
+              <option value="90">90</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+
+          <div class="detail-actions">
+            <button type="button" id="addToCartBtn" class="btn btn-primary">Add to Cart</button>
+            <a href="create.html"><button type="button" id="investBtn" class="btn btn-ghost">Invest</button></a>
+            
+          </div>
+        </div>
+
+        <div class="cart-card">
+          <div class="cart-header">
+            <h3>Cart Summary</h3>
+            <span class="cart-badge" id="cartBadge">0 items</span>
+          </div>
+
+          <div id="cartItems" class="cart-items">
+            <div class="empty-state">Select a product and add it to your cart.</div>
+          </div>
+
+          <div class="cart-total">
+            <span>Total spent</span>
+            <strong id="cartTotal">SLL 0</strong>
+          </div>
+
+          <button type="button" id="purchaseBtn" class="btn btn-accent">Place Order</button>
+          <p id="statusMessage" class="status-message">You can add more than 50 units in one order.</p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const detailTitle = document.getElementById('detailTitle');
+    const detailDesc = document.getElementById('detailDesc');
+    const detailPrice = document.getElementById('detailPrice');
+    const detailFarm = document.getElementById('detailFarm');
+    const quantitySelect = document.getElementById('quantitySelect');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    const investBtn = document.getElementById('investBtn');
+    const cartItems = document.getElementById('cartItems');
+    const cartCount = document.getElementById('cart-count');
+    const cartBadge = document.getElementById('cartBadge');
+    const cartTotal = document.getElementById('cartTotal');
+    const purchaseBtn = document.getElementById('purchaseBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const searchInput = document.getElementById('searchInput');
+
+    let selectedProduct = null;
+    let cart = [];
+
+    function formatMoney(value) {
+      return `SLL ${value.toLocaleString()}`;
+    }
+
+    function updateDetail(product) {
+      selectedProduct = product;
+      detailTitle.textContent = product.name;
+      detailDesc.textContent = `${product.name} is available for both retail and wholesale purchases from ${product.farm}.`;
+      detailPrice.textContent = formatMoney(product.price);
+      detailFarm.textContent = product.farm;
+      quantitySelect.value = '10';
+      document.querySelectorAll('.choice-pill').forEach((pill) => {
+        pill.classList.toggle('active', pill.querySelector('input').checked);
+      });
+    }
+
+    function renderCart() {
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      cartCount.textContent = cart.length;
+      cartBadge.textContent = `${cart.length} item${cart.length === 1 ? '' : 's'}`;
+      cartTotal.textContent = formatMoney(total);
+      purchaseBtn.disabled = cart.length === 0;
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<div class="empty-state">Select a product and add it to your cart.</div>';
+        return;
+      }
+
+      cartItems.innerHTML = cart.map((item) => `
+        <div class="cart-item">
+          <div>
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-meta">${item.saleType} · Qty ${item.quantity}</div>
+          </div>
+          <div class="cart-item-price">${formatMoney(item.price * item.quantity)}</div>
+        </div>
+      `).join('');
+    }
+
+    productCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const product = {
+          name: card.dataset.name,
+          price: Number(card.dataset.price),
+          farm: card.dataset.farm,
+          category: card.dataset.category,
+          emoji: card.dataset.emoji
+        };
+
+        productCards.forEach((item) => item.classList.remove('active'));
+        card.classList.add('active');
+        updateDetail(product);
+      });
+    });
+
+    addToCartBtn.addEventListener('click', () => {
+      if (!selectedProduct) {
+        statusMessage.textContent = 'Choose a product first.';
+        return;
+      }
+
+      const quantity = Number(quantitySelect.value);
+      const saleType = document.querySelector('input[name="saleType"]:checked').value;
+      const existing = cart.find((item) => item.name === selectedProduct.name && item.saleType === saleType);
+
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({
+          name: selectedProduct.name,
+          price: selectedProduct.price,
+          quantity,
+          saleType,
+          farm: selectedProduct.farm
+        });
+      }
+
+      renderCart();
+      statusMessage.textContent = `${selectedProduct.name} added to cart. You can keep adding more items.`;
+    });
+
+    investBtn.addEventListener('click', () => {
+      if (!selectedProduct) {
+        statusMessage.textContent = 'Select a product to start an investment request.';
+        return;
+      }
+      statusMessage.textContent = `Investment interest recorded for ${selectedProduct.name}.`;
+    });
+
+    purchaseBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        statusMessage.textContent = 'Your cart is empty.';
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      statusMessage.textContent = `Order placed successfully for ${formatMoney(total)}.`;
+      cart = [];
+      renderCart();
+    });
+
+    searchInput.addEventListener('input', (event) => {
+      const query = event.target.value.trim().toLowerCase();
+      productCards.forEach((card) => {
+        const text = `${card.dataset.name} ${card.dataset.farm} ${card.dataset.category}`.toLowerCase();
+        card.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    });
+
+    document.querySelectorAll('.choice-pill').forEach((pill) => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.choice-pill').forEach((item) => item.classList.remove('active'));
+        pill.classList.add('active');
+        pill.querySelector('input').checked = true;
+      });
+    });
+
+    updateDetail({
+      name: 'Premium Rice',
+      price: 7800,
+      farm: 'Koroma Family Farm',
+      category: 'Grains',
+      emoji: '🌾'
+    });
+    renderCart();
+  </script>
+</body>
+</html>

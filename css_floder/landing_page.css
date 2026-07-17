@@ -49,32 +49,57 @@
     }
     .logo span { color: var(--straw); }
 
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--bark);
-      font-size: 0.9rem; font-weight: 400;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--bark);
+      font-size: 0.95rem;
+      font-weight: 500;
       letter-spacing: 0.3px;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: var(--leaf); }
+    .nav-link:hover { color: var(--leaf); }
 
-    .nav-cta {
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn-primary {
       background: var(--moss);
       color: var(--cream) !important;
-      padding: 0.55rem 1.4rem;
-      border-radius: 100px;
-      transition: background 0.2s !important;
+      box-shadow: 0 4px 14px rgba(59, 94, 43, 0.18);
     }
-    .nav-cta:hover { background: var(--leaf) !important; color: var(--white) !important; }
+    .nav-btn-primary:hover {
+      background: var(--leaf) !important;
+      color: var(--white) !important;
+    }
 
-    .nav-contact {
-      background: var(--moss);
-      color: var(--cream) !important;
-      padding: 0.55rem 1.4rem;
-      border-radius: 100px;
-      transition: background 0.2s !important;
+    .nav-btn-outline {
+      background: transparent;
+      color: var(--moss) !important;
+      border: 1px solid transparent;
+      padding-left: 0.2rem;
+      padding-right: 0.2rem;
     }
-    .nav-contact:hover { background: var(--leaf) !important; color: var(--white) !important; }
+    .nav-btn-outline:hover {
+      color: var(--leaf) !important;
+      text-decoration: underline;
+    }
 
     /* ── HERO ── */
     .hero {
@@ -194,6 +219,41 @@
       animation: fadeUp 0.8s 0.4s ease both;
     }
     .stat { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .marketplace-summary {
+      margin: 0 4rem 2rem;
+      padding: 2rem 2.5rem;
+      background: linear-gradient(135deg, rgba(90,138,60,0.1), rgba(212,168,67,0.12));
+      border: 1px solid rgba(90,138,60,0.16);
+      border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(44,26,14,0.06);
+    }
+
+    .summary-content {
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .summary-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+      color: var(--soil);
+      line-height: 1.25;
+    }
+
+    .summary-content p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--bark);
+      max-width: 680px;
+    }
+
+    .summary-btn {
+      width: fit-content;
+      margin-top: 0.3rem;
+    }
     .stat-num {
       font-family: 'Playfair Display', serif;
       font-size: 2rem; font-weight: 700; color: var(--moss);
@@ -203,7 +263,7 @@
     /* ── HERO RIGHT (visual) ── */
     .hero-right {
       position: relative; z-index: 1;
-      background-image: url("/AgroVest_project_bsem1203_group_project/images/bg_landing_page.jpg");
+      background-image: url("../images/bg_landing_page.jpg");
       background-repeat: no-repeat;
       /* display: flex; align-items: center; justify-content: center; */
       border-radius: 20px;
